@@ -1,6 +1,5 @@
 <template>
   <div :class="[position, size]" class="button shadow">
-    <b-icon icon="arrow-left"></b-icon>
   </div>
 </template>
 
