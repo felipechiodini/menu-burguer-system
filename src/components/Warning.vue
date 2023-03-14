@@ -1,14 +1,16 @@
 <template>
-  <div class="d-block mx-auto my-3">
-    <h5 class="bg-warning p-2 rounded mx-2">{{ label }}</h5>
+  <div class="d-block mx-auto my-3" v-if="text">
+    <strong>
+      <p class="bg-warning p-2 rounded mx-2">{{ text }}</p>
+    </strong>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    status: {
-      type: Boolean
+    text: {
+      type: String
     }
   },
   computed: {

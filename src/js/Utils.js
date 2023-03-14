@@ -16,3 +16,4 @@ export const translateWeekDay = (weekDay) => {
             return 'Sábado'
     }
 }
+

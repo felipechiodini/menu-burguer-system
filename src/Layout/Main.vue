@@ -9,11 +9,13 @@
 <script>
 import NavBar from '@/components/NavBar.vue'
 import SideBar from '@/components/SideBar.vue'
+import FloatButton from '@/components/FloatButton.vue'
 
 export default {
   components: {
     NavBar,
     SideBar,
+    FloatButton
   }
 }
 

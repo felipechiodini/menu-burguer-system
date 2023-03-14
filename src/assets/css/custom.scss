@@ -2,6 +2,8 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+$body-bg: #f8f8f8;
+
 $theme-colors: (
     "primary": #0074d9,
     "danger": #ff4136
@@ -10,6 +12,7 @@ $theme-colors: (
 .pointer {
     cursor: pointer;
 }
+
 
 // Then import Bootstrap and BootstrapVue SCSS files (order is important)
 @import 'node_modules/bootstrap/scss/bootstrap.scss';

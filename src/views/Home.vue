@@ -1,39 +1,34 @@
 <template>
   <div class="container">
     <div class="row">
-      <store-status :status="data.store_status"></store-status>
-      <div class="col">
-        <apexchart width="500" type="bar" :options="options" :series="series"></apexchart>
-      </div>
+      <img class="w-100" src="https://www.saboravida.com.br/wp-content/uploads/2021/09/hamburgueria-conheca-as-20-melhores-de-sp-1.jpg" alt="">
+      <store-status :status="true"></store-status>
+      <warning text="(47)99732-6769 ATENÇÃO: Bebidas alcoólicas somente para maiores de 18 anos, será conferido a identidade no momento da entrega."></warning>
+      <categoriess></categoriess>
+      <product v-for="(product, key) in products.data" :key="key" :product="product" />
     </div>
   </div>
 </template>
 
-
 <script>
 import Api from '@/js/Api'
 import StoreStatus from '@/components/StoreStatus.vue'
+import Warning from '@/components/Warning.vue'
+import Categoriess from '@/components/Categoriess.vue'
+import Product from '@/components/Product.vue'
 
 export default {
   name: 'Home',
   components: {
-    StoreStatus
+    StoreStatus,
+    Warning,
+    Categoriess,
+    Product,
   },
   data: () => {
     return {
       data: null,
-
-      options: {
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-        }
-      },
-      series: [{
-        name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
-      }]
-
-
+      products: [],
     }
   },
   mounted() {
@@ -41,8 +36,14 @@ export default {
   },
   methods: {
     async load() {
-      const { data } = await Api.get('home')
-      this.data = data
+      const { data } = await Api.get('product')
+      this.products = data
+    },
+    openModal() {
+      this.$FModal.show(
+        Product,
+        { msg: "Welcome to Your Vue.js App" }
+      )
     }
   }
 }
