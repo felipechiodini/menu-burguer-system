@@ -16,7 +16,7 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home
-      }
+      },
     ]
   },
   {
@@ -25,7 +25,7 @@ const routes = [
     component: Cart,
   },
   {
-    path: '/product',
+    path: '/product/:product_id',
     name: 'product.preview',
     component: ProductPreview
   },

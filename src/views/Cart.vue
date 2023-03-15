@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h3 class="text-center mb-3">Carrinho</h3>
-
+    <float-button @click.native="$router.back()" class="bg-primary" size="small" position="top-left" icon="back-icon" />
     <template v-if="step === 1">
       <step-one @next-step="nextStep()"></step-one>
     </template>
@@ -18,13 +17,15 @@
 import StepOne from '@/components/Cart/StepOne.vue'
 import StepTwo from '@/components/Cart/StepTwo.vue'
 import StepThree from '@/components/Cart/StepThree.vue'
+import FloatButton from '@/components/FloatButton.vue';
 
 export default {
   name: 'Cart',
   components: {
     StepOne,
     StepTwo,
-    StepThree
+    StepThree,
+    FloatButton
   },
   data: () => {
     return {

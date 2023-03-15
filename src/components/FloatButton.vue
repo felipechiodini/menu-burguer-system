@@ -4,20 +4,22 @@
 </template>
 
 <script>
-  export default {
-    name: 'FloatButton',
-    props: {
-      icon: {
-        type: String
-      },
-      position: {
-        type: String
-      },
-      size: {
-        type: String
-      }
+
+export default {
+  name: 'FloatButton',
+
+  props: {
+    icon: {
+      type: String
+    },
+    position: {
+      type: String
+    },
+    size: {
+      type: String
     }
   }
+}
 </script>
 
 <style scoped>
@@ -50,7 +52,7 @@
   .button {
     position: fixed;
     border-radius: 50px;
-    background-color: brown;
+    border: none;
     padding: 12px;
     font-size: 25px;
     color: white;

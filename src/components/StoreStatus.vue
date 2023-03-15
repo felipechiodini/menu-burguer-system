@@ -1,6 +1,7 @@
 <template>
-  <div class="d-block mx-auto my-3">
-    <h5 class="bg-warning p-2 rounded mx-2">{{ label }}</h5>
+  <div class="d-flex align-items-center">
+    <b-icon :class="{ 'text-success': status, 'text-danger': !status }" icon="circle-fill"></b-icon>
+    <span class="ml-2">{{ label }}</span>
   </div>
 </template>
 
@@ -13,7 +14,7 @@ export default {
   },
   computed: {
     label() {
-      return this.status ? 'Aberto' : 'Fechada'
+      return this.status ? 'Aberto' : 'Fechado'
     }
   }
 }

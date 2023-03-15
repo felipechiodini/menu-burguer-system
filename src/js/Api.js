@@ -7,7 +7,7 @@ const Api = Axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'x-store-uuid': '02263e7d-1732-34a5-9d28-9fd97231496c'
+    'x-store-uuid': 'bdb04651-a3bc-3e9b-a2e7-16f2a6065732'
   }
 })
 
