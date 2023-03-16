@@ -6,15 +6,16 @@ const Api = Axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'x-store-uuid': 'bdb04651-a3bc-3e9b-a2e7-16f2a6065732'
+    'Accept': 'application/json'
   }
 })
 
 Api.interceptors.request.use(function (config) {
-  const token = Storage.get('user', 'token')
-  if (token) config.headers.Authorization = 'Bearer ' + token
-  return config
+  const id = Storage.get('store', 'id')
+  if (id) {
+    config.headers['x-store-uuid'] = id
+    return config
+  }
 }, function (error) {
   return Promise.reject(error)
 })

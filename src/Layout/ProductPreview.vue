@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid p-0" style="position: relative; padding-bottom: 60px !important; z-index: 1;">
+  <div class="container-fluid p-0" style="position: relative; padding-bottom: 60px !important; z-index: 1;" v-if="product">
     <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" class="mb-2">
       <slide v-for="(photo, key) in product.photos" :key="key">
         <img class="w-100" :src="photo.src">

@@ -4,12 +4,13 @@ import Main from '../Layout/Main.vue'
 import ProductPreview from '../Layout/ProductPreview.vue'
 import Home from '../views/Home.vue'
 import Cart from '../views/Cart.vue'
+import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/:store_slug',
     component: Main,
     children: [
       {
@@ -17,18 +18,23 @@ const routes = [
         name: 'home',
         component: Home
       },
+      {
+        path: '/carrinho',
+        name: 'cart',
+        component: Cart,
+      },
+      {
+        path: '/product/:product_id',
+        name: 'product.preview',
+        component: ProductPreview
+      },
     ]
   },
   {
-    path: '/carrinho',
-    name: 'cart',
-    component: Cart,
-  },
-  {
-    path: '/product/:product_id',
-    name: 'product.preview',
-    component: ProductPreview
-  },
+    path: '*',
+    name: '404',
+    component: NotFound
+  }
 ]
 
 const router = new VueRouter({

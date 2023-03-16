@@ -1,26 +1,45 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <h4 class="col-12 my-3 title">Plankton Smash Burguer</h4>
-      <store-status class="col-12" :status="true"></store-status>
-      <warning text="(47)99732-6769 ATENÇÃO: Bebidas alcoólicas somente para maiores de 18 anos, será conferido a identidade no momento da entrega."></warning>
+  <div>
+    <!-- <nav-bar></nav-bar> -->
+    <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" class="mb-2">
+      <slide>
+        <img class="w-100" src="https://static.expressodelivery.com.br/imagens/banners/228225/Expresso-Delivery_02fd69b75bfe40feaf9161c8cf2caedf.jpeg" alt="">
+      </slide>
+      <slide>
+        <img class="w-100" src="https://static.expressodelivery.com.br/imagens/banners/228225/Expresso-Delivery_02fd69b75bfe40feaf9161c8cf2caedf.jpeg" alt="">
+      </slide>
+    </carousel>
+    <div class="container px-3" v-if="store">
+      <div class="mb-4">
+        <h3 class="title mb-3">{{ store.name }}</h3>
+        <store-status :status="store.status"></store-status>
+        <h5 v-if="store.configuration.allow_withdrawal">{{ 'Retirada: ' + store.configuration.withdrawal_time + ' minutos' }}</h5>
+        <h5>{{ 'Entrega: ' + store.configuration.delivery_time + ' minutos' }}</h5>
+        <h5>{{ 'Pedido minimo: ' + currency(store.configuration.minimum_order_value) }}</h5>
+        <warning :text="store.configuration.warning" />
+      </div>
+
       <product v-for="(product, key) in products" :key="key" :product="product" />
-    </div>
-    <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;">
-      <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
-        <span class="col text-white">2</span>
-        <span class="col text-white">Ver Carrinho</span>
-        <span class="col text-white">{{ currency(23) }}</span>
-      </b-button>
+
+      <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white"
+        style="position: fixed; bottom: -1px; z-index: 2;">
+        <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
+          <span class="col text-white">2</span>
+          <span class="col text-white">Ver Carrinho</span>
+          <span class="col text-white">{{ currency(23) }}</span>
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue'
 import Api from '@/js/Api'
 import StoreStatus from '@/components/StoreStatus.vue'
 import Warning from '@/components/Warning.vue'
 import Product from '@/components/Product.vue'
+import Storage from '@/js/Storage'
 
 export default {
   name: 'Home',
@@ -28,22 +47,29 @@ export default {
     StoreStatus,
     Warning,
     Product,
+    NavBar
   },
   data: () => {
     return {
+      store: null,
       products: null,
     }
   },
-  mounted() {
+  async mounted() {
     this.load()
   },
   methods: {
     async load() {
-      const { data } = await Api.get('product')
+      this.store = Storage.get('store')
+      const {
+        data
+      } = await Api.get('product')
       this.products = data
     },
     goCart() {
-      this.$router.push({ name: 'cart' })
+      this.$router.push({
+        name: 'cart'
+      })
     },
   }
 }
@@ -52,7 +78,7 @@ export default {
 <style scoped>
 
   .title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   .btn-add {
@@ -62,6 +88,5 @@ export default {
     letter-spacing: 0.4px;
     border: none;
   }
-
 
 </style>

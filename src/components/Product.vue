@@ -1,5 +1,5 @@
 <template>
-  <div class="row my-2 mx-3 rounded shadow" @click="goProduct(product)">
+  <div class="row my-2 mx-1 rounded shadow" @click="goProduct(product)">
     <img class="w-100 rounded" :src="product.photos[0].src">
     <div class="px-2 py-2">
       <h3 style="font-size: 1.7rem;">{{ product.name }}</h3>
