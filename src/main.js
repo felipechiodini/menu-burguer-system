@@ -11,6 +11,7 @@ import '@/assets/css/reset.scss'
 
 import Mixins from '@/js/Mixins'
 import VueCarousel from 'vue-carousel';
+import store from './store'
 
 Vue.use(VueCarousel);
 Vue.use(BootstrapVue)
@@ -21,5 +22,6 @@ Vue.mixin(Mixins)
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
