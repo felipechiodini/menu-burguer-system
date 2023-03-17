@@ -18,7 +18,7 @@
         <textarea placeholder="Ex: Tirar a cebola, maionese à parte, ponto da carne, etc." rows="2" class="textarea"></textarea>
       </div>
     </div>
-    <div class="row align-items-center border-top justify-content-around m-0 w-100 py-3 shadow" style="position: fixed; bottom: -1px; z-index: 2;">
+    <div class="row align-items-center border-top justify-content-around m-0 w-100 py-3 shadow" style="position: fixed; bottom: -1px; z-index: 2;" @click="addToCart()">
       <div class="col-auto">
         <b-button variant="transparent" size="sm" @click="decrement()">-</b-button>
         <strong class="mx-3">{{ counter }}</strong>   
@@ -69,8 +69,11 @@ export default {
       if (this.counter === 1) return
       this.counter--
     },
-    addItem() {
-
+    addToCart() {
+      this.$store.dispatch('cart/addProductToCart', {
+        product: this.product,
+        quantity: this.counter
+      })
     }
   }
 }
