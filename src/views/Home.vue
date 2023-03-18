@@ -1,6 +1,6 @@
 <template>
   <div>
-    <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" :autoplay="true" autoplayTimeout="4000" :loop="true">
+    <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" :autoplay="true" :autoplayTimeout="4000" :loop="true">
       <slide v-for="(banner, key) in store.banners" :key="key">
         <img class="w-100" :src="banner.src">
       </slide>
@@ -43,8 +43,8 @@ import Api from '@/js/Api'
 import StoreStatus from '@/components/StoreStatus.vue'
 import Warning from '@/components/Warning.vue'
 import Product from '@/components/Product.vue'
-import Storage from '@/js/Storage'
 import ProductPreview from '@/components/ProductPreview.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
@@ -57,17 +57,18 @@ export default {
   },
   data: () => {
     return {
-      store: null,
       products: null,
       selectProduct: null
     }
+  },
+  computed: {
+    ...mapGetters('store', ['store'])
   },
   async mounted() {
     this.load()
   },
   methods: {
     async load() {
-      this.store = Storage.get('store')
       const { data } = await Api.get('product')
       this.products = data
     },

@@ -1,26 +1,28 @@
 <template>
   <div>
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;" v-if="loading === true">
+      <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
+    </div>
+    <div class="d-flex justify-content-center align-items-center text-center" style="height: 100vh;" v-else-if="loading === false && error === true">
+      <div>
+        <h5>Loja não encontrada</h5>
+      </div>
+    </div>
     <template v-if="loading === false">
       <router-view />
-    </template>
-    <template v-else>
-      Carregando...
     </template>
   </div>
 </template>
 
 <script>
-import FloatButton from '@/components/FloatButton.vue'
-import Storage from '@/js/Storage'
 import Api from '@/js/Api'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 export default {
-  components: {
-    FloatButton
-  },
   data: () => {
     return {
-      loading: true
+      loading: true,
+      error: false
     }
   },
   async mounted() {
@@ -32,13 +34,18 @@ export default {
           slug: this.$route.params.store_slug
         }
       })
-  
-      Storage.set('store', data)
+
+      this.teste(data)
     } catch (error) {
-      this.$router.push({ name: '404' })
+      console.log(error)
+      console.log('here')
+      this.error = true
     }
 
     this.loading = false
+  },
+  methods: {
+    ...mapActions('store', ['teste'])
   }
 }
 

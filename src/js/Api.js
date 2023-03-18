@@ -1,6 +1,6 @@
 import Axios from 'axios'
-import Storage from '@/js/Storage'
 import Router from '@/router'
+import store from '@/store'
 
 const Api = Axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
@@ -11,8 +11,9 @@ const Api = Axios.create({
 })
 
 Api.interceptors.request.use(function (config) {
-  const id = Storage.get('store', 'id')
-  if (id) config.headers['x-store-uuid'] = id
+  if (store.getters['store/id']) {
+    config.headers['x-store-uuid'] = store.getters['store/id']
+  }
   return config
 }, function (error) {
   return Promise.reject(error)
