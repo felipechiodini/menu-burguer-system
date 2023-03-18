@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../Layout/Main.vue'
-import ProductPreview from '../Layout/ProductPreview.vue'
 import Home from '../views/Home.vue'
 import Cart from '../views/Cart.vue'
 import NotFound from '../views/NotFound.vue'
@@ -17,17 +16,7 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home
-      },
-      {
-        path: '/carrinho',
-        name: 'cart',
-        component: Cart,
-      },
-      {
-        path: '/product/:product_id',
-        name: 'product.preview',
-        component: ProductPreview
-      },
+      }
     ]
   },
   {

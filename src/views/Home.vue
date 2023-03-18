@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <nav-bar></nav-bar> -->
     <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" class="mb-2">
       <slide>
         <img class="w-100" src="https://static.expressodelivery.com.br/imagens/banners/228225/Expresso-Delivery_02fd69b75bfe40feaf9161c8cf2caedf.jpeg" alt="">
@@ -9,7 +8,7 @@
         <img class="w-100" src="https://static.expressodelivery.com.br/imagens/banners/228225/Expresso-Delivery_02fd69b75bfe40feaf9161c8cf2caedf.jpeg" alt="">
       </slide>
     </carousel>
-    <div class="container px-3" v-if="store">
+    <div class="container px-3" style="margin-bottom: 100px;" v-if="store">
       <div class="mb-4">
         <h3 class="title mb-3">{{ store.name }}</h3>
         <store-status :status="store.status"></store-status>
@@ -18,9 +17,7 @@
         <h5>{{ 'Pedido minimo: ' + currency(store.configuration.minimum_order_value) }}</h5>
         <warning :text="store.configuration.warning" />
       </div>
-
-      <product v-for="(product, key) in products" :key="key" :product="product" />
-
+      <product @click.native="showProduct(product)" class="my-4 mx-2" v-for="(product, key) in products" :key="key" :product="product" />
       <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white"
         style="position: fixed; bottom: -1px; z-index: 2;">
         <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
@@ -30,6 +27,9 @@
         </b-button>
       </div>
     </div>
+
+    <product-preview :product="selectProduct" ref="modal"></product-preview>
+
   </div>
 </template>
 
@@ -40,6 +40,7 @@ import StoreStatus from '@/components/StoreStatus.vue'
 import Warning from '@/components/Warning.vue'
 import Product from '@/components/Product.vue'
 import Storage from '@/js/Storage'
+import ProductPreview from '@/components/ProductPreview.vue'
 
 export default {
   name: 'Home',
@@ -47,12 +48,14 @@ export default {
     StoreStatus,
     Warning,
     Product,
-    NavBar
+    NavBar,
+    ProductPreview
   },
   data: () => {
     return {
       store: null,
       products: null,
+      selectProduct: null
     }
   },
   async mounted() {
@@ -61,16 +64,12 @@ export default {
   methods: {
     async load() {
       this.store = Storage.get('store')
-      const {
-        data
-      } = await Api.get('product')
+      const { data } = await Api.get('product')
       this.products = data
     },
-    goCart() {
-      this.$router.push({
-        name: 'cart'
-      })
-    },
+    showProduct(product) {
+      this.$refs['modal'].openModal(product.id)
+    }
   }
 }
 </script>

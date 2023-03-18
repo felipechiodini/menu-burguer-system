@@ -1,13 +1,11 @@
 <template>
   <div class="container">
-
     <div class="row mx-1 mt-4 mb-3 border align-items-center item">
       <img class="image m-2" src="https://storage.googleapis.com/intrepid-snow-169619.appspot.com/files/backend/66011019248D4F91AEDB6C5CD60F82A0-1F2016F5CAB148D79B80EDCB829F792B.jpeg">
       <div style="display: flex; flex-direction: column; justify-content: space-around;">
         <span class="mb-4">Ordinary</span>
         <span class="">{{ currency(30) }}</span>
       </div>
-
       <div class="col">
         <b-button variant="transparent" size="sm" @click="decrement()">-</b-button>
         <strong class="mx-3">{{ counter }}</strong>   
