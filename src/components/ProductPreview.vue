@@ -6,23 +6,25 @@
           <img class="w-100" :src="photo.src">
         </slide>
       </carousel>
-      <div class="p-3 display" style="margin-bottom: 100px;">
-        <h4 class="product-title">{{ product.name }}</h4>
-        <p class="product-description">{{ product.description }}</p>
-        <h4 class="my-3">Substituições</h4>
-        <label :for="id(replacement)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(replacement) in product.replacements" :key="id(replacement)">
-          <b-form-checkbox :id="id(replacement)"></b-form-checkbox>
-          <span class="col p-0">{{ replacement.name }}</span>
-          <span class="col-auto">{{ currency(5) }}</span>
-        </label>
-        <h4 class="my-3">Adicionais</h4>
-        <label :for="id(additional)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional) in product.additionals" :key="id(additional)">
-          <b-form-checkbox :for="id(additional)"></b-form-checkbox>
-          <span class="col p-0">{{ additional.name }}</span>
-          <span class="col-auto">{{ currency(5) }}</span>
-        </label>
-        <h4 class="mt-4 mb-2">Alguma Observação?</h4>
-        <textarea placeholder="Ex: Tirar a cebola, maionese à parte, ponto da carne, etc." rows="2" class="textarea"></textarea>
+      <div class="bg-info" style="margin-bottom: 100px;">
+        <div class="p-3 display">
+          <h4 class="product-title">{{ product.name }}</h4>
+          <p class="product-description">{{ product.description }}</p>
+          <h4 class="my-3">Substituições</h4>
+          <label :for="id(replacement)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(replacement) in product.replacements" :key="id(replacement)">
+            <b-form-checkbox :id="id(replacement)"></b-form-checkbox>
+            <span class="col p-0">{{ replacement.name }}</span>
+            <span class="col-auto">{{ currency(5) }}</span>
+          </label>
+          <h4 class="my-3">Adicionais</h4>
+          <label :for="id(additional)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional) in product.additionals" :key="id(additional)">
+            <b-form-checkbox :for="id(additional)"></b-form-checkbox>
+            <span class="col p-0">{{ additional.name }}</span>
+            <span class="col-auto">{{ currency(5) }}</span>
+          </label>
+          <h4 class="mt-4 mb-2">Alguma Observação?</h4>
+          <textarea placeholder="Ex: Tirar a cebola, maionese à parte, ponto da carne, etc." rows="2" class="textarea"></textarea>
+        </div>
       </div>
       <div class="row align-items-center border-top justify-content-around m-0 w-100 py-3 shadow bg-white" style="position: fixed; bottom: -1px; z-index: 2;" @click="addToCart()">
         <div class="col-auto">

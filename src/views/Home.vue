@@ -1,14 +1,11 @@
 <template>
   <div>
-    <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" class="mb-2">
-      <slide>
-        <img class="w-100" src="https://static.expressodelivery.com.br/imagens/banners/228225/Expresso-Delivery_02fd69b75bfe40feaf9161c8cf2caedf.jpeg" alt="">
-      </slide>
-      <slide>
-        <img class="w-100" src="https://static.expressodelivery.com.br/imagens/banners/228225/Expresso-Delivery_02fd69b75bfe40feaf9161c8cf2caedf.jpeg" alt="">
+    <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false">
+      <slide v-for="(banner, key) in store.banners" :key="key">
+        <img class="w-100" :src="banner.src">
       </slide>
     </carousel>
-    <div class="container px-3" style="margin-bottom: 100px;" v-if="store">
+    <div class="container px-3 mt-3" style="margin-bottom: 100px;" v-if="store">
       <div class="mb-4">
         <h3 class="title mb-3">{{ store.name }}</h3>
         <store-status :status="store.status"></store-status>
@@ -16,6 +13,12 @@
         <h5>{{ 'Entrega: ' + store.configuration.delivery_time + ' minutos' }}</h5>
         <h5>{{ 'Pedido minimo: ' + currency(store.configuration.minimum_order_value) }}</h5>
         <warning :text="store.configuration.warning" />
+      </div>
+      <div class="d-flex categories">
+        <span class="category active">Burguer</span>
+        <span class="category">Porções</span>
+        <span class="category">Bebidas</span>
+        <span class="category">Chops</span>
       </div>
       <product @click.native="showProduct(product)" class="my-4 mx-2" v-for="(product, key) in products" :key="key" :product="product" />
       <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white"
@@ -74,7 +77,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
   .title {
     font-size: 1.5rem;
@@ -86,6 +89,23 @@ export default {
     font-size: 14px;
     letter-spacing: 0.4px;
     border: none;
+  }
+
+  .categories {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    padding: 13px;
+    margin: 0 -16px;
+  }
+
+  .category {
+    margin-right: 7px;
+    padding: 6px;
+
+    &.active {
+      border-bottom: 0.5px solid red;
+    }
   }
 
 </style>
