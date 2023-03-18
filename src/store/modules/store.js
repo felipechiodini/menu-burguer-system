@@ -7,12 +7,12 @@ const getters = {
     return state.store
   },
   id: (state) => {
-    return state.store.id
+    return state.store?.id
   }
 }
 
 const actions = {
-  teste({ commit }, store) {
+  setStore({ commit }, store) {
     commit('setStore', store)
   }
 }

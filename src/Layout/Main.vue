@@ -16,7 +16,7 @@
 
 <script>
 import Api from '@/js/Api'
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   data: () => {
@@ -35,7 +35,7 @@ export default {
         }
       })
 
-      this.teste(data)
+      this.setStore(data)
     } catch (error) {
       console.log(error)
       console.log('here')
@@ -45,7 +45,7 @@ export default {
     this.loading = false
   },
   methods: {
-    ...mapActions('store', ['teste'])
+    ...mapActions('store', ['setStore'])
   }
 }
 

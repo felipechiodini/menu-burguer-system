@@ -1,13 +1,13 @@
 <template>
-  <div :class="[position, size]" class="button shadow">
-  </div>
+  <b-button :class="[position, size]" class="button shadow">
+    <slot name="icon"></slot>
+  </b-button>
 </template>
 
 <script>
 
 export default {
   name: 'FloatButton',
-
   props: {
     icon: {
       type: String

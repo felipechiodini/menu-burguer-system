@@ -37,7 +37,18 @@
           <span class="text-white">{{ total }}</span>
         </b-button>
       </div>
-      <float-button @click.native="closeModal()" class="bg-primary" size="small" position="top-left" icon="back-icon" />
+
+      <!-- <div class="parent"> -->
+        <b-button @click.native="closeModal()" class="bg-primary button-rounded">
+          <span>
+            
+            <svg xmlns="http://www.w3.org/2000/svg"><path d="M20 44 0 24 20 4l2.8 2.85L5.65 24 22.8 41.15Z" /></svg>
+          </span>
+        </b-button>
+      <!-- </div> -->
+
+      <!-- <float-button   size="small" position="top-left" icon="back-icon">
+      </float-button> -->
     </div>
     <div class="d-flex justify-content-center align-items-center h-100" v-else>
       <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
@@ -101,7 +112,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
   .fullscreen-modal {
     position: fixed;
@@ -167,6 +178,21 @@ export default {
     border-top-right-radius: 30px !important;
     margin-top: -35px;
     z-index: 2;
+  }
+
+  .button-rounded {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    font-size: 1.6rem;
+    top: 15px;
+    left: 15px;
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
   }
 
 </style>
