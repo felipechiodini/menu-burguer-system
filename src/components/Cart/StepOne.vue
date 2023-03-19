@@ -1,15 +1,27 @@
 <template>
   <div class="container">
-    <div class="row mx-1 mt-4 mb-3 border align-items-center item">
-      <img class="image m-2" src="https://storage.googleapis.com/intrepid-snow-169619.appspot.com/files/backend/66011019248D4F91AEDB6C5CD60F82A0-1F2016F5CAB148D79B80EDCB829F792B.jpeg">
-      <div style="display: flex; flex-direction: column; justify-content: space-around;">
-        <span class="mb-4">Ordinary</span>
-        <span class="">{{ currency(30) }}</span>
-      </div>
-      <div class="col">
-        <b-button variant="transparent" size="sm" @click="decrement()">-</b-button>
-        <strong class="mx-3">{{ counter }}</strong>   
-        <b-button variant="transparent" size="sm" @click="increment()">+</b-button>
+    
+    <div style="margin-top: 75px;">
+      <div class="row mx-1 mt-4 mb-3 align-items-center item shadow" v-for="(product, key) in cartProducts" :key="key" >
+        <img class="image m-2" src="https://storage.googleapis.com/intrepid-snow-169619.appspot.com/files/backend/66011019248D4F91AEDB6C5CD60F82A0-1F2016F5CAB148D79B80EDCB829F792B.jpeg">
+        <div class="col-auto">
+          <div style="display: flex; flex-direction: column; justify-content: space-around;">
+            <span class="">{{ product.name }}</span>
+            <span class="">{{ currency(product.price) }}</span>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <b-button class="d-flex" variant="primary" size="sm" @click="decrementProduct(product.id)">
+            <span v-if="product.count > 1" class="material-icons">remove</span>
+            <span v-else class="material-icons">delete</span>
+          </b-button>
+          <strong class="mx-3">{{ product.count }}</strong>   
+          <b-button class="d-flex" variant="primary" size="sm" @click="incrementProduct(product.id)">
+            <span class="material-icons">add</span>
+          </b-button>
+        </div>
+
       </div>
     </div>
     
@@ -25,7 +37,7 @@
         </tr>
         <tr class="border-top">
           <td>Total</td>
-          <td class="total" align="right">{{ currency(85) }}</td>
+          <td class="total" align="right">{{ currency(cartTotalPrice) }}</td>
         </tr>
       </table>
       <b-button class="border-none bg-primary btn-add" @click="goAddress()">
@@ -38,22 +50,21 @@
 
 <script>
 import FloatButton from '@/components/FloatButton.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     FloatButton
   },
-  data: () => {
-    return {
-      counter: 1
-    }
+  computed: {
+    ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice'])
   },
   methods: {
+    ...mapActions('cart', ['decrementProduct', 'incrementProduct']),
     goAddress() {
       this.$emit('next-step')
-    }
+    },
   }
-
 }
 </script>
 

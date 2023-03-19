@@ -1,42 +1,57 @@
 <template>
   <div class="container my-3">
 
-    <label for="">Nome</label>
-    <b-input v-model="name"></b-input>
-    
-    <label for="">Telefone de Contato</label>
-    <b-input v-model="cellphone"></b-input>
+    <div class="row justify-content-center wraper">
+      <div class="col-12">
+        <label for="name">Nome</label>
+        <b-input id="name" v-model="name"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="">Telefone de Contato</label>
+        <b-input v-model="cellphone"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="cpf">CPF</label>
+        <b-input type="tel" id="cpf" v-model="cpf"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="cep">CEP</label>
+        <b-input type="tel" id="cep" v-mask="'#####-###'" v-model="cep" @input="searchCep" />
+      </div>
+      <div class="col-12">
+        <label for="city">Cidade</label>
+        <b-input id="city" v-model="city"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="state">Estado</label>
+        <b-input id="state" v-model="state"/>
+      </div>
+      <div class="col-12">
+        <label for="district">Bairro</label>
+        <b-input id="district" v-model="district"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="street">Rua</label>
+        <b-input id="street" v-model="street"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="number">Número</label>
+        <b-input type="tel" ref="number" id="number" v-model="number"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="complement">Complemento</label>
+        <b-input id="complement" v-model="complement"></b-input>
+      </div>
+      <div class="col-12">
+        <label for="additionals">Informações adicionais</label>
+        <b-input id="additionals" v-model="additionals"></b-input>
+      </div>
+    </div>
 
-    <label for="">CPF</label>
-    <b-input v-model="cpf"></b-input>
 
-    <label for="">CEP</label>
-    <b-input v-model="cep" @input="searchCep"></b-input>
-
-    <label for="">Estado</label>
-    <b-input v-model="state"></b-input>
-
-    <label for="">Cidade</label>
-    <b-input v-model="city"></b-input>
-
-    <label for="">Bairro</label>
-    <b-input v-model="district"></b-input>
-
-    <label for="">Rua</label>
-    <b-input v-model="street"></b-input>
-
-    <label for="">Número</label>
-    <b-input v-model="number"></b-input>
-
-    <label for="">Complemento</label>
-    <b-input v-model="complement"></b-input>
-
-    <label for="">Informações adicionais</label>
-    <b-input v-model="additionals"></b-input>
-
-    <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg" style="position: fixed; bottom: -1px; z-index: 2;">
+    <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;">
       <b-button class="border-none bg-primary btn-add" @click="confirmOrder()">
-        <span class="text-white">Continuar</span>
+        <span class="text-white">Pagamento</span>
       </b-button>
     </div>
 
@@ -71,6 +86,7 @@ export default {
       this.$emit('next-step')
     },
     async searchCep(cep) {
+      cep = cep.replace('-', '')
       if (cep.length === 8) {
         const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
         if (!data.erro) {
@@ -78,6 +94,8 @@ export default {
           this.city = data.localidade
           this.district = data.bairro
           this.street = data.logradouro
+
+          this.$refs.number.focus()
         }
       }
     }
@@ -87,6 +105,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+  input {
+    border-radius: 0;
+    border: none;  
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+  }
 
   .resume-table {
     width: 90%;
@@ -120,6 +145,15 @@ export default {
     font-size: 14px;
     letter-spacing: 0.4px;
     border: none;
+  }
+
+  .wraper {
+    margin-top: 60px;
+    margin-bottom: 100px;
+    
+    & label {
+      margin: 15px 0 0 0;
+    }
   }
 
 </style>

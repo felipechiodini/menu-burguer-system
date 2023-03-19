@@ -12,7 +12,9 @@ import '@/assets/css/reset.scss'
 import Mixins from '@/js/Mixins'
 import VueCarousel from 'vue-carousel';
 import store from './store'
+import { VueMaskDirective } from 'v-mask'
 
+Vue.directive('mask', VueMaskDirective);
 Vue.use(VueCarousel);
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

@@ -2,28 +2,36 @@ import Api from "@/js/Api"
 
 const state = {
   items: [],
+  products: [],
   checkoutStatus: null
 }
 
-// getters
 const getters = {
   cartProducts: (state, getters, rootState) => {
-    return state.items.map(({ id, quantity }) => {
+    return state.products.map(({ id, count, observation }) => {
       const product = rootState.products.all.find(product => product.id === id)
       return {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        quantity
+        ...product,
+        count,
+        observation
       }
     })
   },
 
   cartTotalPrice: (state, getters) => {
     return getters.cartProducts.reduce((total, product) => {
-      return total + product.price * product.quantity
+      return total + product.price * product.count
     }, 0)
-  }
+  },
+
+  numberProducts: (state, getters) => {
+    return getters.cartProducts?.length
+  },
+
+  hasProducts: (state, getters) => {
+    return getters.numberProducts > 0
+  },
+  
 }
 
 // actions
@@ -33,39 +41,60 @@ const actions = {
     commit('setCheckoutStatus', null)
     // empty cart
     commit('setCartItems', { items: [] })
-    await Api.post('order')
+    await Api.post('order', state.products)
   },
 
-  addProductToCart ({ state, commit }, product) {
-    commit('setCheckoutStatus', null)
-    if (product.inventory > 0) {
-      const cartItem = state.items.find(item => item.id === product.id)
-      if (!cartItem) {
-        commit('pushProductToCart', { id: product.id })
-      } else {
-        commit('incrementItemQuantity', cartItem)
-      }
-      // remove 1 item from stock
-      commit('products/decrementProductInventory', { id: product.id }, { root: true })
+  addProductToCart ({ state, commit }, payload) {
+    const product = state.products.find(product => product.id === payload.id)
+
+    if (!product) {
+      commit('pushProductToCart', payload)
+    } else {
+      commit('incrementItemQuantity', payload)
+    }
+  },
+
+  incrementProduct({ state, commit }, id) {
+    commit('incrementItemCart', id)
+  },
+      
+  decrementProduct({ state, commit }, id) {
+    const product = state.products.find(product => product.id === id)
+
+    if (product.count === 1) {
+      commit('removeItemCart', id)
+    } else {
+      commit('decrementItemCart', id)
     }
   }
+
 }
 
-// mutations
 const mutations = {
-  pushProductToCart (state, { id }) {
-    state.items.push({
-      id,
-      quantity: 1
-    })
+  pushProductToCart(state, product) {
+    state.products.push(product)
   },
 
-  incrementItemQuantity (state, { id }) {
-    const cartItem = state.items.find(item => item.id === id)
-    cartItem.quantity++
+  incrementItemQuantity(state, payload) {
+    const cartItem = state.products.find(product => product.id === payload.id)
+    cartItem.count = cartItem.count + payload.count
   },
 
-  setCartItems (state, { items }) {
+  incrementItemCart(state, id) {
+    const product = state.products.find(product => product.id === id)
+    product.count = product.count + 1
+  },
+
+  decrementItemCart(state, id) {
+    const product = state.products.find(product => product.id === id)
+    product.count = product.count - 1
+  },
+
+  removeItemCart(state, id) {
+    state.products = state.products.filter(product => product.id !== id)
+  },
+
+  setCartItems(state, { items }) {
     state.items = items
   },
 
