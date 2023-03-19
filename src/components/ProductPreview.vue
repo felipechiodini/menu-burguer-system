@@ -1,11 +1,12 @@
 <template>
   <div v-if="modalOpen" class="fullscreen-modal">
     <div v-if="loading === false">
-      <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" class="mb-2">
-        <slide v-for="(photo, key) in product.photos" :key="key">
-          <img class="w-100" :src="photo.src">
-        </slide>
-      </carousel>
+      <div class="  display: grid; grid-template-rows: 1fr 1 fr 1fr 1fr; grid-template-columns: 1fr; height: 300px;">
+        <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" class="mb-2">
+          <slide v-for="(photo, key) in product.photos" :key="key">
+            <img class="w-100" :src="photo.src">
+          </slide>
+        </carousel>
       <div class="bg-info" style="margin-bottom: 100px;">
         <div class="p-3 display">
           <h4 class="product-title">{{ product.name }}</h4>
@@ -38,17 +39,12 @@
         </b-button>
       </div>
 
-      <!-- <div class="parent"> -->
-        <b-button @click.native="closeModal()" class="bg-primary button-rounded">
-          <span>
-            
-            <svg xmlns="http://www.w3.org/2000/svg"><path d="M20 44 0 24 20 4l2.8 2.85L5.65 24 22.8 41.15Z" /></svg>
-          </span>
-        </b-button>
-      <!-- </div> -->
+      </div>
 
-      <!-- <float-button   size="small" position="top-left" icon="back-icon">
-      </float-button> -->
+
+      <b-button @click="closeModal()" class="bg-primary text-white button-rounded">
+        <span class="material-icons">arrow_back_ios_new</span>
+      </b-button>
     </div>
     <div class="d-flex justify-content-center align-items-center h-100" v-else>
       <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
