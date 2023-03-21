@@ -15,37 +15,18 @@
 </template>
 
 <script>
-import Api from '@/js/Api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  data: () => {
-    return {
-      loading: true,
-      error: false
-    }
+  computed: {
+    ...mapGetters('store', ['loading', 'error'])
   },
-  async mounted() {
-    this.loading = true
-
-    try {
-      const { data } = await Api.get('/store', {
-        params: {
-          slug: this.$route.params.store_slug
-        }
-      })
-
-      this.setStore(data)
-    } catch (error) {
-      console.log(error)
-      console.log('here')
-      this.error = true
-    }
-
-    this.loading = false
+  mounted() {
+    this.loadDistance()
+    this.loadStore()
   },
   methods: {
-    ...mapActions('store', ['setStore'])
+    ...mapActions('store', ['loadStore', 'loadDistance']),
   }
 }
 

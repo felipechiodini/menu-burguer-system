@@ -11,8 +11,8 @@ const Api = Axios.create({
 })
 
 Api.interceptors.request.use(function (config) {
-  if (store.getters['store/id']) {
-    config.headers['x-store-uuid'] = store.getters['store/id']
+  if (store.getters['store/store']) {
+    config.headers['x-store-uuid'] = store.getters['store/store'].id
   }
   return config
 }, function (error) {

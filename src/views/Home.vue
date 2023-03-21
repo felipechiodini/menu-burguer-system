@@ -12,6 +12,7 @@
         <h5 class="my-1" v-if="store.configuration.allow_withdrawal">{{ 'Retirada: ' + store.configuration.withdrawal_time + ' minutos' }}</h5>
         <h5 class="my-1">{{ 'Entrega: ' + store.configuration.delivery_time + ' minutos' }}</h5>
         <h5 class="my-1">{{ 'Pedido minimo: ' + currency(store.configuration.minimum_order_value) }}</h5>
+        <h5>{{ labelDistance }}</h5>
         <warning :text="store.configuration.warning" />
       </div>
       <div class="d-flex categories">
@@ -62,7 +63,11 @@ export default {
   computed: {
     ...mapGetters('store', ['store']),
     ...mapGetters('products', ['allProducts']),
-    ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice'])
+    ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice']),
+    labelDistance() {
+      let distance = this.store.distance?.toLocaleString('pt-BR')
+      return distance ? distance + ' km' : ''
+    }
   },
   async mounted() {
     this.getAllProducts()

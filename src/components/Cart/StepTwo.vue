@@ -48,7 +48,6 @@
       </div>
     </div>
 
-
     <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;">
       <b-button class="border-none bg-primary btn-add" @click="confirmOrder()">
         <span class="text-white">Pagamento</span>
