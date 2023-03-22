@@ -54,7 +54,7 @@ export default {
       return true;
     },
     currency(value) {
-      return value.toLocaleString('pt-br', {
+      return value?.toLocaleString('pt-br', {
         style: 'currency',
         currency: 'BRL'
       })

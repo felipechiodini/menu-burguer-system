@@ -99,11 +99,11 @@ export default {
   }
 
   .categories {
-    width: 100%;
     overflow-x: auto;
     position: sticky;
     top: 0;
     background-color: #ffffff;
+    margin: 0 -16px;
   }
 
   .category {

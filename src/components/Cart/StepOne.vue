@@ -1,50 +1,33 @@
 <template>
   <div class="container">
-    
     <div style="margin-top: 75px;">
-      <div class="row mx-1 mt-4 mb-3 align-items-center item shadow" v-for="(product, key) in cartProducts" :key="key" >
-        <img class="image m-2" src="https://storage.googleapis.com/intrepid-snow-169619.appspot.com/files/backend/66011019248D4F91AEDB6C5CD60F82A0-1F2016F5CAB148D79B80EDCB829F792B.jpeg">
-        <div class="col-auto">
-          <div style="display: flex; flex-direction: column; justify-content: space-around;">
-            <span class="">{{ product.name }}</span>
-            <span class="">{{ currency(product.price) }}</span>
+      <div class="row mx-1 p-3 my-3 item shadow" v-for="(product, key) in cartProducts" :key="key" >
+        <img class="image" src="https://storage.googleapis.com/intrepid-snow-169619.appspot.com/files/backend/66011019248D4F91AEDB6C5CD60F82A0-1F2016F5CAB148D79B80EDCB829F792B.jpeg">
+        <div class="col">
+          <h5 class="mb-3 title">{{ product.name }}</h5>
+          <div class="d-flex align-items-center">
+            <b-button style="padding: 2px;" class="d-flex" variant="primary" size="sm" @click="decrementProduct(product.id)">
+              <span v-if="product.count > 1" class="material-icons">remove</span>
+              <span v-else class="material-icons">delete</span>
+            </b-button>
+            <strong class="mx-3">{{ product.count }}</strong>   
+            <b-button style="padding: 2px;" class="d-flex" variant="primary" size="sm" @click="incrementProduct(product.id)">
+              <span class="material-icons">add</span>
+            </b-button>
           </div>
         </div>
-
-        <div class="d-flex align-items-center">
-          <b-button class="d-flex" variant="primary" size="sm" @click="decrementProduct(product.id)">
-            <span v-if="product.count > 1" class="material-icons">remove</span>
-            <span v-else class="material-icons">delete</span>
-          </b-button>
-          <strong class="mx-3">{{ product.count }}</strong>   
-          <b-button class="d-flex" variant="primary" size="sm" @click="incrementProduct(product.id)">
-            <span class="material-icons">add</span>
-          </b-button>
+        <div class="col-auto p-0 d-flex align-items-end">
+          <span class="title">{{ currency(product.price) }}</span>
         </div>
-
       </div>
     </div>
-    
-    <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg" style="position: fixed; bottom: -1px; z-index: 2;">
-      <table class="resume-table">
-        <tr>
-          <td>Subtotal</td>
-          <td align="right">{{ currency(80) }}</td>
-        </tr>
-        <tr>
-          <td>Entrega</td>
-          <td align="right">{{ currency(5) }}</td>
-        </tr>
-        <tr class="border-top">
-          <td>Total</td>
-          <td class="total" align="right">{{ currency(cartTotalPrice) }}</td>
-        </tr>
-      </table>
-      <b-button class="border-none bg-primary btn-add" @click="goAddress()">
-        <span class="text-white">Continuar</span>
+    <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;">
+      <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goAddress()">
+        <span class="col text-white">{{ numberProducts }}</span>
+        <span class="col text-white">Continuar</span>
+        <span class="col text-white">{{ currency(cartTotalPrice) }}</span>
       </b-button>
     </div>
-
   </div>
 </template>
 
@@ -94,6 +77,10 @@ export default {
 
   .item {
     border-radius: 5px;
+  }
+
+  .title {
+    font-size: 1.4rem;
   }
 
   .btn-add {

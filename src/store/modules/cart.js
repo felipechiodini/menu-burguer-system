@@ -1,8 +1,8 @@
 import Api from "@/js/Api"
 
 const state = {
-  items: [],
   products: [],
+  shippingPrice: null,
   checkoutStatus: null
 }
 
@@ -24,8 +24,14 @@ const getters = {
     }, 0)
   },
 
-  numberProducts: (state, getters) => {
-    return getters.cartProducts?.length
+  cartShippingPrice: (state) => {
+    return state.shippingPrice
+  },
+
+  numberProducts: (state) => {
+    return state.products.reduce((acumulator, product) => {
+      return acumulator = acumulator + product.count
+    }, 0)
   },
 
   hasProducts: (state, getters) => {
@@ -42,6 +48,10 @@ const actions = {
     // empty cart
     commit('setCartItems', { items: [] })
     await Api.post('order', state.products)
+  },
+
+  setShipping({ commit }, value) {
+    commit('setShippingPrice', value)
   },
 
   addProductToCart ({ state, commit }, payload) {
@@ -94,13 +104,10 @@ const mutations = {
     state.products = state.products.filter(product => product.id !== id)
   },
 
-  setCartItems(state, { items }) {
-    state.items = items
+  setShippingPrice(state, shippingPrice) {
+    state.shippingPrice = shippingPrice
   },
 
-  setCheckoutStatus (state, status) {
-    state.checkoutStatus = status
-  }
 }
 
 export default {

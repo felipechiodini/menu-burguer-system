@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import cart from './modules/cart'
+import user from './modules/user'
 import store from './modules/store'
 import products from './modules/products'
 import createPersistedState from 'vuex-persistedstate';
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   },
   modules: {
     cart,
+    user,
     store,
     products
   },

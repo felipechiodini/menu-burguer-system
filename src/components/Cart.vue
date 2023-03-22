@@ -37,6 +37,11 @@ export default {
       modalOpen: false,
     }
   },
+   watch: {
+    'hasProducts': function(value) {
+      if (value === false) this.closeModal()
+    }
+  },
   computed: {
     ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice'])
   },
