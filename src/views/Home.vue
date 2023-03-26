@@ -8,7 +8,7 @@
     <div class="container px-3 mt-3" style="margin-bottom: 100px;" v-if="store">
       <div class="mb-4">
         <h3 class="title mb-3">{{ store.name }}</h3>
-        <store-status :status="store.status"></store-status>
+        <store-status :status="store.open"></store-status>
         <h5 class="my-1" v-if="store.configuration.allow_withdrawal">{{ 'Retirada: ' + store.configuration.withdrawal_time + ' minutos' }}</h5>
         <h5 class="my-1">{{ 'Entrega: ' + store.configuration.delivery_time + ' minutos' }}</h5>
         <h5 class="my-1">{{ 'Pedido minimo: ' + currency(store.configuration.minimum_order_value) }}</h5>
@@ -19,7 +19,6 @@
         <div class="category" v-for="(category, key) in store.categories" :key="key">{{ category.name }}</div>
       </div>
       <product @click.native="showProduct(product)" class="my-4 mx-2" v-for="(product, key) in allProducts" :key="key" :product="product" />
-
       <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;" v-if="hasProducts">
         <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
           <span class="col text-white">{{ numberProducts }}</span>
@@ -27,12 +26,9 @@
           <span class="col text-white">{{ currency(cartTotalPrice) }}</span>
         </b-button>
       </div>
-
     </div>
-
     <product-preview :product="selectProduct" ref="modal"></product-preview>
     <cart ref="cart"></cart>
-
   </div>
 </template>
 
