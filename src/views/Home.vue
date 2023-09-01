@@ -18,7 +18,9 @@
       <div class="d-flex categories">
         <div class="category" v-for="(category, key) in store.categories" :key="key">{{ category.name }}</div>
       </div>
-      <product @click.native="showProduct(product)" class="my-4 mx-2" v-for="(product, key) in allProducts" :key="key" :product="product" />
+
+      <product @click.native="showProduct(product)" class="my-4 mx-2" v-for="(product, key) in allProducts.products" :key="key" :product="product" />
+
       <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;" v-if="hasProducts">
         <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
           <span class="col text-white">{{ numberProducts }}</span>
@@ -74,7 +76,7 @@ export default {
       this.$refs['cart'].openModal()
     },
     showProduct(product) {
-      this.$refs['modal'].openModal(product.id)
+      this.$refs['modal'].openModal(product)
     }
   }
 }

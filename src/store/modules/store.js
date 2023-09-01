@@ -35,7 +35,7 @@ const actions = {
 
       commit('setStore', data)
     } catch (error) {
-      commit('setError', true)
+      // commit('setError', true)
     }
 
     commit('setLoading', false)

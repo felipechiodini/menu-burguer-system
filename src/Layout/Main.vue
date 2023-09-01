@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;" v-if="loading === true">
+    <!-- <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
       <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
     </div>
-    <div class="d-flex justify-content-center align-items-center text-center" style="height: 100vh;" v-else-if="loading === false && error === true">
+    <div class="d-flex justify-content-center align-items-center text-center" style="height: 100vh;">
       <div>
         <h5>Loja não encontrada</h5>
       </div>
-    </div>
-    <template v-if="loading === false">
+    </div> -->
+    <template>
       <router-view />
     </template>
   </div>

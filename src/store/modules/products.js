@@ -12,7 +12,7 @@ const getters = {
 
 const actions = {
   getAllProducts({ commit }) {
-    Api.get('/product').then(({ data }) => {
+    Api.get('/products').then(({ data }) => {
       commit('setProducts', data)
     })
   }
