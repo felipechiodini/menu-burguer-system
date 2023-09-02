@@ -9,17 +9,19 @@
       <div class="p-3 display" style="height: 580px; overflow: auto;">
         <h4 class="product-title">{{ product.name }}</h4>
         <p class="product-description">{{ product.description }}</p>
-        <h4 class="my-3">Substituições</h4>
-        <label :for="id(replacement)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(replacement) in product.replacements" :key="id(replacement)">
-          <b-form-checkbox :id="id(replacement)"></b-form-checkbox>
-          <span class="col p-0">{{ replacement.name }}</span>
-          <span class="col-auto">{{ currency(replacement.value) }}</span>
-        </label>
         <h4 class="my-3">Adicionais</h4>
-        <label :for="id(additional)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional) in product.additionals" :key="id(additional)">
-          <b-form-checkbox :for="id(additional)"></b-form-checkbox>
+        <label :for="id(additional.name)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional) in product.additionals" :key="id(additional)">
+          <b-form-checkbox :for="id(additional.name)"></b-form-checkbox>
           <span class="col p-0">{{ additional.name }}</span>
-          <span class="col-auto">{{ currency(additional.value) }}</span>
+          <span class="col-auto">+ {{ currency(additional.value) }}</span>
+          <b-button size="sm" variant="transparent" >-</b-button>
+          <b-button size="sm" variant="transparent" >+</b-button>
+        </label>
+        <h4 class="my-3">Substituições</h4>
+        <label :for="id(replacement.name)" class="w-100 row align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(replacement) in product.replacements" :key="id(replacement)">
+          <b-form-checkbox :id="id(replacement.name)"></b-form-checkbox>
+          <span class="col p-0">{{ replacement.name }}</span>
+          <span class="col-auto">+ {{ currency(replacement.value) }}</span>
         </label>
         <h4 class="mt-4 mb-2">Alguma Observação?</h4>
         <textarea v-model="observation" placeholder="Ex: Tirar a cebola, maionese à parte, ponto da carne, etc." rows="2" class="textarea"></textarea>
@@ -81,6 +83,8 @@ export default {
         id: this.product.id,
         observation: this.observation,
         count: this.counter,
+        additionals: {},
+        replacements: {}
       })
 
       this.closeModal()
@@ -88,11 +92,11 @@ export default {
     id(item) {
       return `${item.name}-${item.id}`
     },
-    openModal(product) {
+    async openModal(product) {
       this.modalOpen = true
       this.loading = true
-      // const { data } = await Api.get(`/product/${id}`)
-      this.product = product
+      const { data } = await Api.get(`/product/${product.id}`)
+      this.product = data.product
       document.body.style.overflow = 'hidden'
       this.loading = false
     },

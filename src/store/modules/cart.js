@@ -54,7 +54,7 @@ const actions = {
     commit('setShippingPrice', value)
   },
 
-  addProductToCart ({ state, commit }, payload) {
+  addProductToCart({ state, commit }, payload) {
     const product = state.products.find(product => product.id === payload.id)
 
     if (!product) {

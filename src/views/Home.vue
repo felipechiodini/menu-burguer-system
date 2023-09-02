@@ -1,6 +1,13 @@
 <template>
   <div>
-    <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false" :autoplay="true" :autoplayTimeout="4000" :loop="true">
+    <carousel
+      :per-page="1"
+      paginationPosition="bottom-overlay"
+      :mouse-drag="false"
+      :autoplay="true"
+      :autoplayTimeout="4000"
+      :loop="true"
+    >
       <slide v-for="(banner, key) in store.banners" :key="key">
         <img class="w-100" :src="banner.src">
       </slide>
@@ -15,11 +22,19 @@
         <h5>{{ labelDistance }}</h5>
         <warning :text="store.configuration.warning" />
       </div>
-      <div class="d-flex categories">
-        <div class="category" v-for="(category, key) in store.categories" :key="key">{{ category.name }}</div>
+      <div class="categories">
+        <div class="category" v-for="(category, key) in store.categories" :key="key">
+          {{ category.name }}
+        </div>
       </div>
 
-      <product @click.native="showProduct(product)" class="my-4 mx-2" v-for="(product, key) in allProducts.products" :key="key" :product="product" />
+      <product
+        class="my-4 mx-2"
+        @click.native="showProduct(product)"
+        v-for="(product, key) in products"
+        :key="key"
+        :product="product"
+      />
 
       <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;" v-if="hasProducts">
         <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
@@ -29,8 +44,11 @@
         </b-button>
       </div>
     </div>
-    <product-preview :product="selectProduct" ref="modal"></product-preview>
-    <cart ref="cart"></cart>
+    <product-preview
+      :product="selectProduct"
+      ref="modal"
+    />
+    <cart ref="cart" />
   </div>
 </template>
 
@@ -42,6 +60,7 @@ import Product from '@/components/Product.vue'
 import ProductPreview from '@/components/ProductPreview.vue'
 import Cart from '@/components/Cart.vue'
 import { mapActions, mapGetters } from 'vuex'
+import Api from '@/js/Api'
 
 export default {
   name: 'Home',
@@ -55,23 +74,27 @@ export default {
   },
   data: () => {
     return {
+      products: null,
       selectProduct: null
     }
   },
   computed: {
     ...mapGetters('store', ['store']),
-    ...mapGetters('products', ['allProducts']),
     ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice']),
     labelDistance() {
       let distance = this.store.distance?.toLocaleString('pt-BR')
       return distance ? distance + ' km' : ''
     }
   },
-  async mounted() {
-    this.getAllProducts()
+  mounted() {
+    this.load()
   },
   methods: {
-    ...mapActions('products', ['getAllProducts']),
+    load() {
+      Api.get('/products').then(({ data }) => {
+        this.products = data.products
+      })
+    },
     goCart() {
       this.$refs['cart'].openModal()
     },
@@ -97,24 +120,26 @@ export default {
   }
 
   .categories {
+    display: flex;
     overflow-x: auto;
     position: sticky;
     top: 0;
     background-color: #ffffff;
     margin: 0 -16px;
-  }
 
-  .category {
-    padding: 20px 0;
-    margin: 0 5px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
-    &.active {
-      border-bottom: 0.8px solid red;
+    .category {
+      padding: 20px 0;
+      margin: 0 5px;
+
+      &.active {
+        border-bottom: 0.8px solid red;
+      }
     }
   }
 
-  .categories::-webkit-scrollbar{
-    display: none;
-  }
 
 </style>
