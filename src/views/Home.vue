@@ -12,7 +12,7 @@
         <img class="w-100" :src="banner.src">
       </slide>
     </carousel>
-    <div class="container px-3 mt-3" style="margin-bottom: 100px;" v-if="store">
+    <div class="container px-3 mt-3" v-if="store">
       <div class="mb-4">
         <h3 class="title mb-3">{{ store.name }}</h3>
         <store-status :status="store.open"></store-status>
@@ -27,16 +27,14 @@
           {{ category.name }}
         </div>
       </div>
-
       <product
         class="my-4 mx-2"
         @click.native="showProduct(product)"
-        v-for="(product, key) in products"
+        v-for="(product, key) in allProducts"
         :key="key"
         :product="product"
       />
-
-      <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;" v-if="hasProducts">
+      <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: sticky; bottom: 0; right: 0; z-index: 2;" v-if="hasProducts">
         <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
           <span class="col text-white">{{ numberProducts }}</span>
           <span class="col text-white">Ver Carrinho</span>
@@ -60,7 +58,6 @@ import Product from '@/components/Product.vue'
 import ProductPreview from '@/components/ProductPreview.vue'
 import Cart from '@/components/Cart.vue'
 import { mapActions, mapGetters } from 'vuex'
-import Api from '@/js/Api'
 
 export default {
   name: 'Home',
@@ -81,20 +78,17 @@ export default {
   computed: {
     ...mapGetters('store', ['store']),
     ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice']),
+    ...mapGetters('products', ['allProducts']),
     labelDistance() {
       let distance = this.store.distance?.toLocaleString('pt-BR')
       return distance ? distance + ' km' : ''
     }
   },
   mounted() {
-    this.load()
+    this.getAllProducts()
   },
   methods: {
-    load() {
-      Api.get('/products').then(({ data }) => {
-        this.products = data.products
-      })
-    },
+    ...mapActions('products', ['getAllProducts']),
     goCart() {
       this.$refs['cart'].openModal()
     },

@@ -10,13 +10,13 @@ const getters = {
   }
 }
 
-// const actions = {
-//   getAllProducts({ commit }) {
-//     Api.get('/products').then(({ data }) => {
-//       commit('setProducts', data)
-//     })
-//   }
-// }
+const actions = {
+  getAllProducts({ commit }) {
+    Api.get('/products').then(({ data }) => {
+      commit('setProducts', data.products)
+    })
+  }
+}
 
 const mutations = {
   setProducts (state, products) {

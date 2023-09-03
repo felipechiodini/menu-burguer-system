@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../Layout/Main.vue'
 import Home from '../views/Home.vue'
-import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
 

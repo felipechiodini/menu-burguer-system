@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div style="margin-top: 75px;">
-      <div class="row mx-1 p-3 my-3 item shadow" v-for="(product, key) in cartProducts" :key="key" >
-        <img class="image" src="https://storage.googleapis.com/intrepid-snow-169619.appspot.com/files/backend/66011019248D4F91AEDB6C5CD60F82A0-1F2016F5CAB148D79B80EDCB829F792B.jpeg">
+      <div class="row mx-1 p-3 my-3 item shadow border" v-for="(product, key) in cartProducts" :key="key" >
+        <img class="image" :src="product.main_photo.src">
         <div class="col">
           <h5 class="mb-3 title">{{ product.name }}</h5>
           <div class="d-flex align-items-center">

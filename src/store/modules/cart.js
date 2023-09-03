@@ -8,20 +8,28 @@ const state = {
 
 const getters = {
   cartProducts: (state, getters, rootState) => {
-    return state.products.map(({ id, count, observation }) => {
-      const product = rootState.products.all.find(product => product.id === id)
+    return state.products.map(product => {
+      const rootProduct = rootState.products.all.find(product => product.id === product.id)
+
+      const price = (rootProduct.price * product.count)
+        + product.additionals.reduce((acumulator, additional) => acumulator += additional.price * additional.amount, 0)
+        + product.replacements.reduce((acumulator, replacement) => acumulator += replacement.price, 0)
+      
       return {
-        ...product,
-        count,
-        observation
+        id: product.id,
+        name: rootProduct.name,
+        main_photo: rootProduct.main_photo,
+        count: product.count,
+        additionals: product.additionals,
+        replacements: product.replacements,
+        observation: product.observation,
+        price: price
       }
     })
   },
 
   cartTotalPrice: (state, getters) => {
-    return getters.cartProducts.reduce((total, product) => {
-      return total + product.price * product.count
-    }, 0)
+    return getters.cartProducts.reduce((total, product) => total += product.price, 0)
   },
 
   cartShippingPrice: (state) => {

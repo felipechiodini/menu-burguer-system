@@ -31,9 +31,9 @@ const actions = {
         }
       })
 
-      document.title = data.name
+      document.title = data.store.name
 
-      commit('setStore', data)
+      commit('setStore', data.store)
     } catch (error) {
       // commit('setError', true)
     }
