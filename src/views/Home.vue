@@ -34,13 +34,13 @@
         :key="key"
         :product="product"
       />
-      <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: sticky; bottom: 0; right: 0; z-index: 2;" v-if="hasProducts">
-        <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
-          <span class="col text-white">{{ numberProducts }}</span>
-          <span class="col text-white">Ver Carrinho</span>
-          <span class="col text-white">{{ currency(cartTotalPrice) }}</span>
-        </b-button>
-      </div>
+    </div>
+    <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white m-0" style="position: sticky; bottom: 0; right: 0; z-index: 2;" v-if="hasProducts">
+      <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goCart()">
+        <span class="col text-white">{{ numberProducts }}</span>
+        <span class="col text-white">Ver Carrinho</span>
+        <span class="col text-white">{{ currency(cartTotalPrice) }}</span>
+      </b-button>
     </div>
     <product-preview
       :product="selectProduct"
