@@ -4,13 +4,13 @@
       <span class="material-icons">arrow_back_ios_new</span>
     </b-button>
     <template v-if="step === 1">
-      <step-one @next-step="nextStep()"></step-one>
+      <step-one @next-step="nextStep()" />
     </template>
     <template v-else-if="step === 2">
-      <step-two @next-step="nextStep()"></step-two>
+      <step-two @next-step="nextStep()" />
     </template>
     <template v-else-if="step === 3">
-      <step-three></step-three>
+      <step-three />
     </template>
   </div>
 </template>

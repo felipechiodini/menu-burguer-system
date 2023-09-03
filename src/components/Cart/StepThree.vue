@@ -1,29 +1,22 @@
 <template>
   <div class="container-fluid">
 
-
-    <div class="mt-4">
-      <label for="">Cupon</label>
-      <b-input v-model="coupon"></b-input>
-    </div>
-
-
-    <label class="d-flex align-items-center payment-method" :class="{ 'border shadow': teste === 'pix' }" for="pix">
+    <label class="d-flex align-items-center payment-method" @click="setPayment('pix')" :class="{ 'border shadow': teste === 'pix' }" for="pix">
       <b-form-radio v-model="teste" name="payment-method" value="pix" id="pix"></b-form-radio>
       <span>Pix</span>
     </label>
 
-    <label class="d-flex align-items-center payment-method" :class="{ 'border shadow': teste === 'credit-card' }" for="credit-card">
+    <label class="d-flex align-items-center payment-method" @click="setPayment('credit-card')" :class="{ 'border shadow': teste === 'credit-card' }" for="credit-card">
       <b-form-radio v-model="teste" name="payment-method" value="credit-card" id="credit-card"></b-form-radio>
       <span>Cartão de Crédito</span>
     </label>
 
-    <label class="d-flex align-items-center payment-method" :class="{ 'border shadow': teste === 'debit-card' }" for="debit-card">
+    <label class="d-flex align-items-center payment-method" @click="setPayment('debit-card')" :class="{ 'border shadow': teste === 'debit-card' }" for="debit-card">
       <b-form-radio v-model="teste" name="payment-method" value="debit-card" id="debit-card"></b-form-radio>
       <span>Cartão de Débito</span>
     </label>
 
-    <label class="d-flex align-items-center payment-method" :class="{ 'border shadow': teste === 'cash' }" for="cash">
+    <label class="d-flex align-items-center payment-method" @click="setPayment('cash')" :class="{ 'border shadow': teste === 'cash' }" for="cash">
       <b-form-radio v-model="teste" name="payment-method" value="cash" id="cash"></b-form-radio>
       <span>Dinheiro</span>
     </label>
@@ -44,7 +37,7 @@
           <td class="total" align="right">{{ currency(85) }}</td>
         </tr>
       </table>
-      <b-button class="border-none bg-primary btn-add" @click="goAddress()">
+      <b-button class="border-none bg-primary btn-add" @click="finish()">
         <span class="text-white">Confirmar Pedido</span>
       </b-button>
     </div>
@@ -53,12 +46,17 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data: () => {
     return {
       coupon: null,
       teste: null
     }
+  },
+  methods: {
+    ...mapActions('cart', ['finish', 'setPayment']),
   }
 }
 </script>

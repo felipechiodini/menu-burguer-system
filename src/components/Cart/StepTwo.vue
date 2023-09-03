@@ -13,13 +13,13 @@
         <label for="cpf">CPF</label>
         <b-input type="tel" id="cpf" v-model="cpf"></b-input>
       </div>
-      <div class="col-12">
+      <!-- <div class="col-12">
         <b-form-group>
           <label class="w-100 border rounded p-2 my-2" v-for="(address, key) in user.addresses" :key="key">
             <b-form-radio v-model="selected" name="some-radios">{{ `${address.cep}, ${address.street} - ${address.number}` }}</b-form-radio>
           </label>
         </b-form-group>
-      </div>
+      </div> -->
     </div>
 
     <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;">
@@ -37,7 +37,7 @@
           <td class="total" align="right">{{ currency(cartTotalPrice) }}</td>
         </tr>
       </table>
-      <b-button :disabled="true" class="border-none bg-primary btn-add" @click="confirmOrder()">
+      <b-button class="border-none bg-primary btn-add" @click="confirmOrder()">
         <span class="text-white">Pagamento</span>
       </b-button>
     </div>

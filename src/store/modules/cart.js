@@ -50,12 +50,29 @@ const getters = {
 
 // actions
 const actions = {
-  async checkout ({ commit, state }, products) {
-    const savedCartItems = [...state.items]
-    commit('setCheckoutStatus', null)
-    // empty cart
-    commit('setCartItems', { items: [] })
-    await Api.post('order', state.products)
+  async finish({ commit, state }, products) {
+    await Api.post('cart/finish', {
+      products: state.products,
+      customer: {
+        name: 'Felipe Chiodini Bona',
+        cpf: '11048424910',
+        email: 'felipechiodinibona@hotmail.com'
+      },
+      delivery: {
+        type: 1
+      },
+      payment: {
+        id: 'pix'
+      },
+      address: {
+        street: 'Arthur gonççalvez e arruajo',
+        number: '500'
+      }
+    })
+  },
+
+  setPayment({ commit }, value) {
+    commit('setPaymentr', value)
   },
 
   setShipping({ commit }, value) {
@@ -115,6 +132,12 @@ const mutations = {
   setShippingPrice(state, shippingPrice) {
     state.shippingPrice = shippingPrice
   },
+
+  setPaymentr(state, value) {
+    state.payment = {
+      payment_type_id: value
+    }
+  }
 
 }
 
