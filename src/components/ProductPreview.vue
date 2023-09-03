@@ -55,7 +55,7 @@
         </b-button>
       </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center h-100" v-else>
+    <div class="d-flex justify-content-center align-items-center h-100" v-else-if="loading === true">
       <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
     </div>
   </div>
@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     total() {
-      return (this.counter * this.product.price) + this.additionalsTotal + this.replacementTotal
+      return (this.product.price + this.additionalsTotal + this.replacementTotal) * this.counter
     },
     additionalsTotal() {
       return this.additionals.reduce((acumulator, additional) => acumulator += additional.price * additional.amount, 0)

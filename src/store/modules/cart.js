@@ -9,11 +9,11 @@ const state = {
 const getters = {
   cartProducts: (state, getters, rootState) => {
     return state.products.map(product => {
-      const rootProduct = rootState.products.all.find(product => product.id === product.id)
+      const rootProduct = rootState.products.all.find(item => item.id === product.id)
 
-      const price = (rootProduct.price * product.count)
+      const price = (rootProduct.price +
         + product.additionals.reduce((acumulator, additional) => acumulator += additional.price * additional.amount, 0)
-        + product.replacements.reduce((acumulator, replacement) => acumulator += replacement.price, 0)
+        + product.replacements.reduce((acumulator, replacement) => acumulator += replacement.price, 0)) * product.count
       
       return {
         id: product.id,
