@@ -1,8 +1,10 @@
 <template>
   <div v-if="modalOpen" class="fullscreen-modal">
-    <b-button @click="goBack()" class="bg-primary text-white button-rounded">
-      <span class="material-icons">arrow_back_ios_new</span>
-    </b-button>
+    <div class="w-100 bg-primary">
+      <b-button @click="goBack()" variant="primary" class="button-rounded">
+        <span class="material-icons">arrow_back_ios_new</span>
+      </b-button>
+    </div>
     <template v-if="step === 1">
       <step-one @next-step="nextStep()" />
     </template>
@@ -95,15 +97,13 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
     font-size: 1.6rem;
-    top: 15px;
-    left: 15px;
     border: none;
     border-radius: 50px;
     height: 50px;
     width: 50px;
     overflow: hidden;
+    color: #ffffff;
   }
 
 </style>
