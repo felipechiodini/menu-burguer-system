@@ -1,14 +1,9 @@
 <template>
   <div>
-    <div class="d-flex justify-content-center align-items-center w-100 bg-primary py-1">
-      <b-button @click="$emit('go-back')" variant="primary" class="col-auto">
-        <span class="material-icons">arrow_back_ios</span>
-      </b-button>
-      <span class="col text-white">Carrinho</span>
-    </div>
+    <cart-header @go-back="$emit('go-back')" icon="arrow_back_ios" name="" />
     <div>
       <div>
-        <div class="row align-items-center border-bottom w-100 p-4 pointer m-0" v-for="(option, key) in options" :key="key" @click="selectOption(option)">
+        <div v-wave class="row align-items-center border-bottom w-100 p-4 pointer m-0" v-for="(option, key) in options" :key="key" @click="selectOption(option)">
           <b-form-radio size="lg" name="option-select" :value="option.id" v-model="selectedOption" class="col-auto" />
           <span class="material-icons mr-2">{{ option.icon }}</span>
           <span>{{ option.name }}</span>
@@ -84,8 +79,12 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import CartHeader from './Header.vue'
 
 export default {
+  components: {
+    CartHeader
+  },
   data: () => {
     return {
       customer: {

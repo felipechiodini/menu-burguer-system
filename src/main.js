@@ -9,6 +9,15 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import '@/assets/css/custom.scss'
 import '@/assets/css/reset.scss'
 
+import VWave from 'v-wave'
+
+Vue.use(VWave, {
+  color: '#ccc',
+  initialOpacity: 0.5,
+  easing: 'ease-in',
+  dissolveDuration: .5
+})
+
 import Mixins from '@/js/Mixins'
 import VueCarousel from 'vue-carousel'
 import store from './store'

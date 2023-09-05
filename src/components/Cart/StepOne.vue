@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="d-flex justify-content-center align-items-center w-100 bg-primary">
-      <b-button @click="$emit('go-back')" variant="primary" class="col-auto button-rounded">
-        <span class="material-icons">expand_more</span>
-      </b-button>
-      <span class="col text-white">Carrinho</span>
-    </div>
+    <cart-header @go-back="$emit('go-back')" icon="arrow_forward_ios" name="Sacola" :down="true" />
     <div style="height: 95%; overflow: auto;">
       <div  class="row m-0 p-4 border-bottom" v-for="(product, key) in cartProducts" :key="key" >
         <img class="image rounded" :src="product.main_photo.src">
@@ -55,11 +50,13 @@
 
 <script>
 import FloatButton from '@/components/FloatButton.vue'
+import CartHeader from './Header.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    FloatButton
+    FloatButton,
+    CartHeader
   },
   computed: {
     ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice'])

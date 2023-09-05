@@ -1,18 +1,10 @@
 <template>
   <div>
-
-    <div class="d-flex justify-content-center align-items-center w-100 bg-primary py-1">
-      <b-button @click="$emit('go-back')" variant="primary" class="col-auto">
-        <span class="material-icons">arrow_back_ios</span>
-      </b-button>
-      <span class="col text-white">Carrinho</span>
-    </div>
-
-    <label :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payments" :key="key">
+    <cart-header @go-back="$emit('go-back')" icon="arrow_back_ios" name="" />
+    <label v-wave :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payments" :key="key">
       <b-form-radio :id="`${payment.id}`" size="lg" name="selected-payment" :value="payment.id" v-model="payment.id" class="col-auto" />
       <span>{{ payment.name }}</span>
     </label>
-
     <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white m-0" style="position: fixed; bottom: 0; z-index: 2;">
       <table class="resume-table">
         <tr>
@@ -32,14 +24,17 @@
         <span class="text-white">Confirmar Pedido</span>
       </b-button>
     </div>
-
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import CartHeader from './Header.vue'
 
 export default {
+  components: {
+    CartHeader
+  },
   data: () => {
     return {
       payment: {
