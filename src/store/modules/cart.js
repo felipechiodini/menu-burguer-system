@@ -3,6 +3,8 @@ import Api from "@/js/Api"
 const state = {
   products: [],
   shippingPrice: null,
+  customer: null,
+  shipping: null,
   checkoutStatus: null
 }
 
@@ -48,35 +50,13 @@ const getters = {
   
 }
 
-// actions
 const actions = {
-  async finish({ commit, state }, products) {
-    await Api.post('cart/finish', {
-      products: state.products,
-      customer: {
-        name: 'Felipe Chiodini Bona',
-        cpf: '11048424910',
-        email: 'felipechiodinibona@hotmail.com'
-      },
-      delivery: {
-        type: 1
-      },
-      payment: {
-        id: 'pix'
-      },
-      address: {
-        street: 'Arthur gonççalvez e arruajo',
-        number: '500'
-      }
-    })
+  setShipping({ commit }, payload) {
+    commit('setShipping', payload)
   },
 
-  setPayment({ commit }, value) {
-    commit('setPaymentr', value)
-  },
-
-  setShipping({ commit }, value) {
-    commit('setShippingPrice', value)
+  setPayment({ commit }, payload) {
+    commit('setPayment', payload)
   },
 
   addProductToCart({ state, commit }, payload) {
@@ -101,7 +81,17 @@ const actions = {
     } else {
       commit('decrementItemCart', id)
     }
-  }
+  },
+
+  async finish() {
+    await Api.post('cart/finish', {
+      products: state.products,
+      customer: this.customer,
+      delivery: this.delivery,
+      payment: this.payment,
+      address: this.address
+    })
+  },
 
 }
 
@@ -129,14 +119,13 @@ const mutations = {
     state.products = state.products.filter(product => product.id !== id)
   },
 
-  setShippingPrice(state, shippingPrice) {
-    state.shippingPrice = shippingPrice
+  setShipping(state, payload) {
+    state.customer = payload.customer
+    state.shipping = payload.shipping
   },
 
-  setPaymentr(state, value) {
-    state.payment = {
-      payment_type_id: value
-    }
+  setPayment(state, payload) {
+    state.payment = payload
   }
 
 }

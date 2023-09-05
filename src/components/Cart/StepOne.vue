@@ -1,32 +1,54 @@
 <template>
-  <div class="container">
-    <div style="margin-top: 75px;">
-      <div class="row mx-1 p-3 my-3 item shadow border" v-for="(product, key) in cartProducts" :key="key" >
-        <img class="image" :src="product.main_photo.src">
-        <div class="col">
+  <div>
+    <div class="d-flex justify-content-center align-items-center w-100 bg-primary">
+      <b-button @click="$emit('go-back')" variant="primary" class="col-auto button-rounded">
+        <span class="material-icons">expand_more</span>
+      </b-button>
+      <span class="col text-white">Carrinho</span>
+    </div>
+    <div style="height: 95%; overflow: auto;">
+      <div  class="row m-0 p-4 border-bottom" v-for="(product, key) in cartProducts" :key="key" >
+        <img class="image rounded" :src="product.main_photo.src">
+        <div class="col px-2 my-2">
           <h5 class="mb-3 title">{{ product.name }}</h5>
-          <div class="d-flex align-items-center">
-            <b-button style="padding: 2px;" class="d-flex" variant="primary" size="sm" @click="decrementProduct(product.id)">
-              <span v-if="product.count > 1" class="material-icons">remove</span>
-              <span v-else class="material-icons">delete</span>
-            </b-button>
-            <strong class="mx-3">{{ product.count }}</strong>   
-            <b-button style="padding: 2px;" class="d-flex" variant="primary" size="sm" @click="incrementProduct(product.id)">
-              <span class="material-icons">add</span>
-            </b-button>
-          </div>
-        </div>
-        <div class="col-auto p-0 d-flex align-items-end">
+          <template v-if="product.additionals">
+            <div v-for="additional in product.additionals" :key="additional.name">
+              <span>{{ additional.amount }}x {{ additional.name }}</span>
+            </div>
+          </template>
+          <template v-if="product.replacements">
+            <div v-for="(replacement, key) in product.replacements" :key="key">
+              <span>{{ replacement.name }}</span>
+            </div>
+          </template>
           <span class="title">{{ currency(product.price) }}</span>
         </div>
+        <div class="col-auto p-0 align-self-end d-flex align-items-center justify-content-center p-1 border rounded">
+          <b-button variant="transparent" class="d-flex p-0" @click="decrementProduct(product.id)">
+            <span v-if="product.count > 1" class="material-icons">remove</span>
+            <span v-else class="material-icons text-primary">delete</span>
+          </b-button>
+          <strong class="mx-4">{{ product.count }}</strong>   
+          <b-button variant="transparent" class="d-flex p-0" @click="incrementProduct(product.id)">
+            <span class="material-icons text-primary">add</span>
+          </b-button>
+        </div>
       </div>
-    </div>
-    <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white" style="position: fixed; bottom: -1px; z-index: 2;">
-      <b-button class="row justify-content-between border-none bg-primary btn-add" @click="goAddress()">
-        <span class="col text-white">{{ numberProducts }}</span>
-        <span class="col text-white">Continuar</span>
-        <span class="col text-white">{{ currency(cartTotalPrice) }}</span>
-      </b-button>
+      <div class="w-100 p-3 shadow d-flex flex-column justify-content-cent bg-white" style="position: sticky; bottom: 0; left: 0; z-index: 2;" >
+        <table class="mb-3 mt-1 w-100">
+          <tr>
+            <td class="p-1">Total</td>
+            <td class="p-1" align="right">{{ currency(cartTotalPrice) }}</td>
+          </tr>
+          <tr>
+            <td class="p-1">Entrega</td>
+            <td class="p-1" align="right">Aguardando endereço</td>
+          </tr>
+        </table>
+        <b-button variant="primary" @click="$emit('next-step')">
+          Continuar
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -43,10 +65,7 @@ export default {
     ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice'])
   },
   methods: {
-    ...mapActions('cart', ['decrementProduct', 'incrementProduct']),
-    goAddress() {
-      this.$emit('next-step')
-    },
+    ...mapActions('cart', ['decrementProduct', 'incrementProduct'])
   }
 }
 </script>
@@ -69,9 +88,8 @@ export default {
   }
 
   .image {
-    border-radius: 5px;
-    height: 100px;
-    width: 100px;
+    height: 85px;
+    width: 85px;
     object-fit: cover;
   }
 
@@ -80,7 +98,7 @@ export default {
   }
 
   .title {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
   }
 
   .btn-add {

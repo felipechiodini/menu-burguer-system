@@ -1,23 +1,19 @@
 <template>
-  <div v-if="modalOpen" class="fullscreen-modal">
-    <div class="w-100 bg-primary">
-      <b-button @click="goBack()" variant="primary" class="button-rounded">
-        <span class="material-icons">arrow_back_ios_new</span>
-      </b-button>
-    </div>
+  <modal v-model="opened">
     <template v-if="step === 1">
-      <step-one @next-step="nextStep()" />
+      <step-one @go-back="closeModal()" @next-step="nextStep()" />
     </template>
     <template v-else-if="step === 2">
-      <step-two @next-step="nextStep()" />
+      <step-two @go-back="goBack()" @next-step="nextStep()" />
     </template>
     <template v-else-if="step === 3">
-      <step-three />
+      <step-three @go-back="goBack()" @next-step="nextStep()" />
     </template>
-  </div>
+  </modal>
 </template>
 
 <script>
+import Modal from './Modal.vue'
 import StepOne from '@/components/Cart/StepOne.vue'
 import StepTwo from '@/components/Cart/StepTwo.vue'
 import StepThree from '@/components/Cart/StepThree.vue'
@@ -27,6 +23,7 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'Cart',
   components: {
+    Modal,
     StepOne,
     StepTwo,
     StepThree,
@@ -34,12 +31,11 @@ export default {
   },
   data: () => {
     return {
-      page: null,
       step: 1,
-      modalOpen: false,
+      opened: false,
     }
   },
-   watch: {
+  watch: {
     'hasProducts': function(value) {
       if (value === false) this.closeModal()
     }
@@ -47,63 +43,22 @@ export default {
   computed: {
     ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice'])
   },
+  mounted() {
+    this.$root.$on('child2', () => console.log('uidwahufa'));
+  },
   methods: {
     nextStep() {
       this.step++
     },
     openModal() {
-      this.modalOpen = true
-      document.body.style.overflow = 'hidden'
+      this.opened = true
     },
     closeModal() {
-      document.body.style.overflow = ''
-      this.modalOpen = false
+      this.opened = false
     },
     goBack() {
-      if (this.step === 1) {
-        this.closeModal()
-      } else {
-        this.step--
-      }
+      this.step--
     }
   }
 }
 </script>
-
-<style scoped>
-
-  .fullscreen-modal {
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    animation: slide-up 0.3s ease-out forwards;
-  }
-
-  @keyframes slide-up {
-    0% {
-      transform: translateY(100%);
-    }
-
-    100% {
-      transform: translateY(0%);
-    }
-  }
-
-  .button-rounded {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.6rem;
-    border: none;
-    border-radius: 50px;
-    height: 50px;
-    width: 50px;
-    overflow: hidden;
-    color: #ffffff;
-  }
-
-</style>

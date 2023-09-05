@@ -1,16 +1,23 @@
 <template>
   <div>
 
-    <label class="d-flex align-items-center pointer w-100 p-4 border-bottom" @click="setPayment(option)" :class="{ 'bg-primary shadow': teste === 'pix' }" for="pix" v-for="(option, key) in options" :key="key">
-      <b-form-radio v-model="teste" name="payment-method" value="pix" id="pix"></b-form-radio>
-      <span>{{ option.name }}</span>
+    <div class="d-flex justify-content-center align-items-center w-100 bg-primary py-1">
+      <b-button @click="$emit('go-back')" variant="primary" class="col-auto">
+        <span class="material-icons">arrow_back_ios</span>
+      </b-button>
+      <span class="col text-white">Carrinho</span>
+    </div>
+
+    <label :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payments" :key="key">
+      <b-form-radio :id="`${payment.id}`" size="lg" name="selected-payment" :value="payment.id" v-model="payment.id" class="col-auto" />
+      <span>{{ payment.name }}</span>
     </label>
 
     <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white m-0" style="position: fixed; bottom: 0; z-index: 2;">
       <table class="resume-table">
         <tr>
           <td>Subtotal</td>
-          <td align="right">{{ currency(80) }}</td>
+          <td align="right">{{ currency(cartTotalPrice) }}</td>
         </tr>
         <tr>
           <td>Entrega</td>
@@ -30,23 +37,29 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data: () => {
     return {
-      coupon: null,
-      teste: null,
-      options: [
-        { name: 'Dinheiro' },
-        { name: 'Pix' },
-        { name: 'Cartão Crédito' },
-        { name: 'Cartão Débito' },
-      ]
+      payment: {
+        id: null  
+      }
     }
   },
+  computed: {
+    ...mapGetters('store', ['store']),
+    ...mapGetters('cart', ['cartTotalPrice'])
+  },
   methods: {
-    ...mapActions('cart', ['finish', 'setPayment']),
+    ...mapActions('cart', ['setPayment']),
+    setPaymentId(option) {
+      this.payment.id = option.id
+    },
+    finish() {
+      this.setPayment(this.payment)
+      this.finish()
+    }
   }
 }
 </script>

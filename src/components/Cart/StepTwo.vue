@@ -1,64 +1,83 @@
 <template>
   <div>
-    <div>
-      <div class="row align-items-center border-bottom w-100 p-4 pointer m-0" v-for="(option, key) in options" :key="key" :class="{ 'bg-primary': selectedOption === option.id }" @click="selectOption(option)">
-        <span class="material-icons mr-2">{{ option.icon }}</span>
-        <span>{{ option.name }}</span>
-        <span class="ml-auto col-auto d-flex align-items-center">
-          <span class="material-icons mr-1">access_time</span>
-          <span>{{ option.time }}</span>
-        </span>
-        <b-form-radio v-model="selectedOption" class="col-auto" />
-      </div>
-      <template v-if="selectedOption !== null">
-        <div class="row border-bottom align-items-center w-100 p-3 rounded m-0 pointer" v-if="isDelivery">
-          <div class="col-auto">
-            <span class="material-icons">gps_fixed</span>
-          </div>
-          <div class="col d-flex flex-column">
-            <small class="text-muted mb-1" style="font-size: 13px;">Entregar em</small>
-            <strong class="mb-1">Guilherme Koehler, 174</strong>
-            <small class="text-muted mb-1" style="font-size: 13px;">Vieiras</small>
-          </div>
-          <div class="col-auto">
-            <span class="material-icons">arrow_forward_ios</span>
-          </div>
-        </div>
-        <div class="row justify-content-center p-3">
-          <div class="col-12 mb-3">
-            <b-input placeholder="Nome" class="px-1" id="name" v-model="name" />
-          </div>
-          <div class="col-12 mb-3">
-            <b-input placeholder="Celular" class="px-1" v-model="cellphone" />
-          </div>
-          <div class="col-12 mb-3">
-            <b-input placeholder="CPF" class="px-1" type="tel" id="cpf" v-model="cpf" />
-          </div>
-          <div class="col-12 mb-3">
-            <b-input placeholder="E-mail" class="px-1" type="email" id="email" v-model="email" />
-          </div>
-        </div>
-      </template>
-    </div>
-    <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white" style="position: sticky; bottom: 0; left: 0; z-index: 2;">
-      <table class="resume-table">
-        <tr>
-          <td>Subtotal</td>
-          <td align="right">{{ currency(cartTotalPrice) }}</td>
-        </tr>
-        <tr>
-          <td>Entrega</td>
-          <td align="right">{{ currency(cartShippingPrice) || 'Aguardando endereço' }}</td>
-        </tr>
-        <tr class="border-top">
-          <td>Total</td>
-          <td class="total" align="right">{{ currency(cartTotalPrice) }}</td>
-        </tr>
-      </table>
-      <b-button class="border-none bg-primary btn-add d-flex align-items-center justify-content-center" @click="confirmOrder()">
-        <span class="text-white mr-3">Pagamento</span>
-        <span class="material-icons text-white">arrow_forward_ios</span>
+    <div class="d-flex justify-content-center align-items-center w-100 bg-primary py-1">
+      <b-button @click="$emit('go-back')" variant="primary" class="col-auto">
+        <span class="material-icons">arrow_back_ios</span>
       </b-button>
+      <span class="col text-white">Carrinho</span>
+    </div>
+    <div>
+      <div>
+        <div class="row align-items-center border-bottom w-100 p-4 pointer m-0" v-for="(option, key) in options" :key="key" @click="selectOption(option)">
+          <b-form-radio size="lg" name="option-select" :value="option.id" v-model="selectedOption" class="col-auto" />
+          <span class="material-icons mr-2">{{ option.icon }}</span>
+          <span>{{ option.name }}</span>
+          <span class="ml-auto col-auto d-flex align-items-center">
+            <span class="material-icons mr-1">access_time</span>
+            <span>{{ option.time }}</span>
+          </span>
+        </div>
+
+        <template v-if="selectedOption !== null">
+          <div class="row border-bottom align-items-center w-100 p-3 rounded m-0 pointer" v-if="isDelivery">
+            <div class="col-auto">
+              <span class="material-icons">gps_fixed</span>
+            </div>
+            <div class="col d-flex flex-column">
+              <small class="text-muted mb-1" style="font-size: 13px;">Entregar em</small>
+              <strong class="mb-1">Guilherme Koehler, 174</strong>
+              <small class="text-muted mb-1" style="font-size: 13px;">Vieiras</small>
+            </div>
+            <div class="col-auto">
+              <span class="material-icons">arrow_forward_ios</span>
+            </div>
+          </div>
+          <div class="row border-bottom align-items-center w-100 p-3 rounded m-0 pointer" v-else>
+            <div class="col-auto">
+              <span class="material-icons">storefront</span>
+            </div>
+            <div class="col d-flex flex-column">
+              <h3 class="mb-1 text-bolder" style="font-size: 20px;">Retirar na loja</h3>
+              <strong class="mb-1">Rua João Planincheck, 333</strong>
+              <small class="text-muted mb-1" style="font-size: 13px;">Nova Brasília</small>
+            </div>
+          </div>
+          <div class="row justify-content-center py-3">
+            <div class="col-12 mb-3">
+              <b-input placeholder="Nome" class="px-3" id="name" v-model="customer.name" />
+            </div>
+            <div class="col-12 mb-3">
+              <b-input placeholder="Celular" v-mask="'(##) # ########'" class="px-3" v-model="customer.cellphone" />
+            </div>
+            <div class="col-12 mb-3">
+              <b-input placeholder="CPF" v-mask="'###.###.###-##'" class="px-3" type="tel" id="cpf" v-model="customer.cpf" />
+            </div>
+            <div class="col-12 mb-3">
+              <b-input placeholder="E-mail" class="px-3" type="email" id="email" v-model="customer.email" />
+            </div>
+          </div>
+        </template>
+      </div>
+      <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white" style="position: sticky; bottom: 0; left: 0; z-index: 2;">
+        <table class="resume-table">
+          <tr>
+            <td>Subtotal</td>
+            <td align="right">{{ currency(cartTotalPrice) }}</td>
+          </tr>
+          <tr>
+            <td>Entrega</td>
+            <td align="right">{{ currency(cartShippingPrice) || 'Aguardando endereço' }}</td>
+          </tr>
+          <tr class="border-top">
+            <td>Total</td>
+            <td class="total" align="right">{{ currency(cartTotalPrice) }}</td>
+          </tr>
+        </table>
+        <b-button class="border-none bg-primary btn-add d-flex align-items-center justify-content-center" @click="next()">
+          <span class="text-white mr-3">Pagamento</span>
+          <span class="material-icons text-white">arrow_forward_ios</span>
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -69,19 +88,21 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data: () => {
     return {
-      name: null,
-      cpf: null,
-      cep: null,
-      state: null,
-      city: null,
-      district: null,
-      street: null,
-      number: null,
-      complement: null,
-      cellphone: null,
-      email: null,
-      additionals: null,
-      selected: null,
+      customer: {
+        name: null,
+        cellphone: null,
+        cpf: null,
+        email: null
+      },
+      address: {
+        cep: null,
+        state: null,
+        city: null,
+        district: null,
+        street: null,
+        number: null,
+        complement: null,
+      },
       selectedOption: null,
       options: [
         { id: 1, name: 'Entrega', icon: 'delivery_dining', time: '1h' },
@@ -98,8 +119,48 @@ export default {
   },
   methods: {
     ...mapActions('cart', ['setShipping']),
-    confirmOrder() {
+    next() {
+      this.setShipping({
+        customer: this.customer,
+        shipping: this.shipping
+      })
+
       this.$emit('next-step')
+    },
+    validateCPF(cpf) {
+      cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+      if (cpf.length !== 11) {
+        return false; // O CPF deve ter 11 dígitos
+      }
+
+      // Verifica se todos os dígitos são iguais (CPF inválido)
+      if (/^(\d)\1+$/.test(cpf)) {
+        return false;
+      }
+
+      // Calcula o primeiro dígito verificador
+      let sum = 0;
+      for (let i = 0; i < 9; i++) {
+        sum += parseInt(cpf.charAt(i)) * (10 - i);
+      }
+      let remainder = 11 - (sum % 11);
+      let firstDigit = (remainder === 10 || remainder === 11) ? 0 : remainder;
+
+      // Calcula o segundo dígito verificador
+      sum = 0;
+      for (let i = 0; i < 10; i++) {
+        sum += parseInt(cpf.charAt(i)) * (11 - i);
+      }
+      remainder = 11 - (sum % 11);
+      let secondDigit = (remainder === 10 || remainder === 11) ? 0 : remainder;
+
+      // Verifica se os dígitos verificadores calculados correspondem aos dígitos reais
+      if (parseInt(cpf.charAt(9)) === firstDigit && parseInt(cpf.charAt(10)) === secondDigit) {
+        return true; // CPF válido
+      } else {
+        return false; // CPF inválido
+      }
     },
     selectOption(option) {
       this.selectedOption = option.id
