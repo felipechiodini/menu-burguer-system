@@ -3,8 +3,20 @@ import Api from "@/js/Api"
 const state = {
   products: [],
   shippingPrice: null,
-  customer: null,
+  customer: {
+    name: null
+  },
   shipping: null,
+  delivery: {
+    type: null
+  },
+  payment: {
+    id: null
+  },
+  address: {
+    street: null,
+    number: null,
+  },
   checkoutStatus: null
 }
 
@@ -47,12 +59,36 @@ const getters = {
   hasProducts: (state, getters) => {
     return getters.numberProducts > 0
   },
+
+  delivery: (state) => {
+    return state.delivery
+  },
+
+  address: (state) => {
+    return state.address
+  },
+
+  customer: (state) => {
+    return state.customer
+  },
+
+  selectedPayment: (state) => {
+    return state.payment
+  }
   
 }
 
 const actions = {
-  setShipping({ commit }, payload) {
-    commit('setShipping', payload)
+  setCustomer({ commit }, payload) {
+    commit('setCustomer', payload)
+  },
+
+  setDelivery({ commit }, payload) {
+    commit('setDelivery', payload)
+  },
+
+  setAddress({ commit }, payload) {
+    commit('setAddress', payload)
   },
 
   setPayment({ commit }, payload) {
@@ -83,15 +119,15 @@ const actions = {
     }
   },
 
-  async finish() {
-    await Api.post('cart/finish', {
+  finishCart({ state }) {
+    return Api.post('cart/finish', {
       products: state.products,
-      customer: this.customer,
-      delivery: this.delivery,
-      payment: this.payment,
-      address: this.address
+      customer: state.customer,
+      delivery: state.delivery,
+      payment: state.payment,
+      address: state.address
     })
-  },
+  }
 
 }
 
@@ -119,13 +155,25 @@ const mutations = {
     state.products = state.products.filter(product => product.id !== id)
   },
 
-  setShipping(state, payload) {
-    state.customer = payload.customer
-    state.shipping = payload.shipping
+  setDelivery(state, payload) {
+    state.delivery.type = payload
   },
 
   setPayment(state, payload) {
-    state.payment = payload
+    state.payment = {
+      id: payload
+    }
+
+    console.log('here')
+    console.log(state.payment)
+  },
+
+  setAddress(state, payload) {
+    state.address = payload
+  },
+  
+  setCustomer(state, payload) {
+    state.customer = payload
   }
 
 }

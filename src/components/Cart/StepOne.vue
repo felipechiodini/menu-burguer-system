@@ -20,7 +20,7 @@
         </div>
         <div class="col-auto p-0 align-self-end d-flex align-items-center justify-content-center p-1 border rounded">
           <b-button variant="transparent" class="d-flex p-0" @click="decrementProduct(product.id)">
-            <span v-if="product.count > 1" class="material-icons">remove</span>
+            <span v-if="product.count > 1" class="material-icons text-primary">remove</span>
             <span v-else class="material-icons text-primary">delete</span>
           </b-button>
           <strong class="mx-4">{{ product.count }}</strong>   

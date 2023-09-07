@@ -1,8 +1,8 @@
 <template>
   <div>
     <cart-header @go-back="$emit('go-back')" icon="arrow_back_ios" name="" />
-    <label v-wave :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payments" :key="key">
-      <b-form-radio :id="`${payment.id}`" size="lg" name="selected-payment" :value="payment.id" v-model="payment.id" class="col-auto" />
+    <label v-wave :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payments" :key="key" @click="fawjfwioafkwioa(payment)">
+      <b-form-radio :id="`${payment.id}`" size="lg" name="selected-payment" :value="payment.id" v-model="selectedPayment.id" class="col-auto" />
       <span>{{ payment.name }}</span>
     </label>
     <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white m-0" style="position: fixed; bottom: 0; z-index: 2;">
@@ -37,23 +37,26 @@ export default {
   },
   data: () => {
     return {
-      payment: {
-        id: null  
-      }
+      id: null
     }
   },
   computed: {
     ...mapGetters('store', ['store']),
-    ...mapGetters('cart', ['cartTotalPrice'])
+    ...mapGetters('cart', ['cartTotalPrice', 'selectedPayment'])
   },
   methods: {
-    ...mapActions('cart', ['setPayment']),
-    setPaymentId(option) {
-      this.payment.id = option.id
+    ...mapActions('cart', ['setPayment', 'finishCart']),
+    fawjfwioafkwioa(payment) {
+      this.setPayment(payment.id)
     },
     finish() {
-      this.setPayment(this.payment)
-      this.finish()
+      this.finishCart().then(() => {
+        this.$router.push({
+          name: 'order.finish'
+        })
+      }).catch(() => {
+        alert('error')
+      })
     }
   }
 }

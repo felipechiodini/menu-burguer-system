@@ -3,8 +3,8 @@
     <cart-header @go-back="$emit('go-back')" icon="arrow_back_ios" name="" />
     <div>
       <div>
-        <div v-wave class="row align-items-center border-bottom w-100 p-4 pointer m-0" v-for="(option, key) in options" :key="key" @click="selectOption(option)">
-          <b-form-radio size="lg" name="option-select" :value="option.id" v-model="selectedOption" class="col-auto" />
+        <div v-wave class="row align-items-center border-bottom w-100 p-4 pointer m-0" v-for="(option, key) in store.delivery_options" :key="key" @click="selectOption(option)">
+          <b-form-radio size="lg" name="option-select" :value="option.id" v-model="delivery.type" class="col-auto" />
           <span class="material-icons mr-2">{{ option.icon }}</span>
           <span>{{ option.name }}</span>
           <span class="ml-auto col-auto d-flex align-items-center">
@@ -12,15 +12,14 @@
             <span>{{ option.time }}</span>
           </span>
         </div>
-
-        <template v-if="selectedOption !== null">
-          <div class="row border-bottom align-items-center w-100 p-3 rounded m-0 pointer" v-if="isDelivery">
+        <template v-if="hasSelectedOption">
+          <div class="row border-bottom align-items-center w-100 p-3 rounded m-0 pointer" v-if="isDelivery" @click="$emit('open-address')">
             <div class="col-auto">
               <span class="material-icons">gps_fixed</span>
             </div>
             <div class="col d-flex flex-column">
               <small class="text-muted mb-1" style="font-size: 13px;">Entregar em</small>
-              <strong class="mb-1">Guilherme Koehler, 174</strong>
+              <strong class="mb-1">{{ address.street }}, {{ address.number }}</strong>
               <small class="text-muted mb-1" style="font-size: 13px;">Vieiras</small>
             </div>
             <div class="col-auto">
@@ -37,12 +36,12 @@
               <small class="text-muted mb-1" style="font-size: 13px;">Nova Brasília</small>
             </div>
           </div>
-          <div class="row justify-content-center py-3">
+          <div class="py-3">
             <div class="col-12 mb-3">
               <b-input placeholder="Nome" class="px-3" id="name" v-model="customer.name" />
             </div>
             <div class="col-12 mb-3">
-              <b-input placeholder="Celular" v-mask="'(##) # ########'" class="px-3" v-model="customer.cellphone" />
+              <b-input placeholder="Celular" v-mask="'(##) # ####-####'" class="px-3" v-model="customer.cellphone" />
             </div>
             <div class="col-12 mb-3">
               <b-input placeholder="CPF" v-mask="'###.###.###-##'" class="px-3" type="tel" id="cpf" v-model="customer.cpf" />
@@ -53,7 +52,7 @@
           </div>
         </template>
       </div>
-      <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white" style="position: sticky; bottom: 0; left: 0; z-index: 2;">
+      <div class="row align-items-center border-top justify-content-around w-100 py-3 shadow-lg bg-white m-0" style="position: fixed; bottom: 0; left: 0; z-index: 2;">
         <table class="resume-table">
           <tr>
             <td>Subtotal</td>
@@ -88,42 +87,27 @@ export default {
   data: () => {
     return {
       customer: {
-        name: null,
-        cellphone: null,
-        cpf: null,
-        email: null
-      },
-      address: {
-        cep: null,
-        state: null,
-        city: null,
-        district: null,
-        street: null,
-        number: null,
-        complement: null,
-      },
-      selectedOption: null,
-      options: [
-        { id: 1, name: 'Entrega', icon: 'delivery_dining', time: '1h' },
-        { id: 2, name: 'Retirada', icon: 'storefront', time: '30min' }
-      ]
+        name: 'Felipe Chiodini Bona',
+        cellphone: '47999097070',
+        cpf: '11048424910',
+        email: 'felipechiodinibona@hotmail.com'
+      }
     }
   },
   computed: {
-    ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice', 'cartShippingPrice']),
-    ...mapGetters('user', ['user']),
+    ...mapGetters('store', ['store']),
+    ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice', 'cartShippingPrice', 'delivery', 'address']),
     isDelivery() {
-      return this.selectedOption === 1
+      return this.delivery?.type === 'shipping'
+    },
+    hasSelectedOption() {
+      return !!this.delivery?.type
     }
   },
   methods: {
-    ...mapActions('cart', ['setShipping']),
+    ...mapActions('cart', ['setDelivery', 'setCustomer']),
     next() {
-      this.setShipping({
-        customer: this.customer,
-        shipping: this.shipping
-      })
-
+      this.setCustomer(this.customer)
       this.$emit('next-step')
     },
     validateCPF(cpf) {
@@ -162,24 +146,13 @@ export default {
       }
     },
     selectOption(option) {
-      this.selectedOption = option.id
+      this.setDelivery(option.id)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
-  input {
-    border-radius: 0;
-    border: none;  
-    border-bottom: 1px solid #ccc;
-    margin: 0;
-
-    &:focus {
-      outline: none;
-    }
-  }
 
   .resume-table {
     width: 90%;

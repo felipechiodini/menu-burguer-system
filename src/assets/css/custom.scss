@@ -9,6 +9,17 @@ $theme-colors: (
     "secondary": #f5b10d,
 );
 
+input {
+    border-radius: 0;
+    border: none;  
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+
+    &:focus {
+        outline: none;
+    }
+}
+
 .pointer {
     cursor: pointer;
 }
