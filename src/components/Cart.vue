@@ -1,5 +1,6 @@
 <template>
   <modal v-model="opened">
+    <transition name="slide" mode="out-in">
     <template v-if="step === 'first-step'">
       <step-one @go-back="closeModal()" @next-step="setStep('second-step')" />
     </template>
@@ -7,11 +8,15 @@
       <step-two @go-back="setStep('first-step')" @open-address="setStep('address')" @next-step="setStep('thrid-step')" />
     </template>
     <template v-else-if="step === 'thrid-step'">
-      <step-three @go-back="setStep('second-step')" />
+      <step-three @go-back="setStep('second-step')" @finished="setStep('finished')" />
     </template>
     <template v-else-if="step === 'address'">
       <addresss @go-back="setStep('second-step')"  />
     </template>
+    <template v-else-if="step === 'finished'">
+      <finished  />
+    </template>
+  </transition>
   </modal>
 </template>
 
@@ -21,6 +26,7 @@ import StepOne from '@/components/Cart/StepOne.vue'
 import StepTwo from '@/components/Cart/StepTwo.vue'
 import StepThree from '@/components/Cart/StepThree.vue'
 import Addresss from '@/components/Cart/Address.vue'
+import Finished from '@/components/Cart/Finished.vue'
 import FloatButton from '@/components/FloatButton.vue';
 import { mapGetters } from 'vuex';
 
@@ -32,7 +38,8 @@ export default {
     StepTwo,
     StepThree,
     FloatButton,
-    Addresss
+    Addresss,
+    Finished
   },
   data: () => {
     return {
@@ -67,3 +74,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+.slide-move,
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+}
+
+</style>

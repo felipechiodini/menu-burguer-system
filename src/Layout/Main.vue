@@ -8,7 +8,7 @@
         <h5>Loja não encontrada</h5>
       </div>
     </div>
-    <template>
+    <template v-else>
       <router-view />
     </template>
   </div>

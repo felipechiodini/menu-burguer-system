@@ -32,13 +32,14 @@ const actions = {
       })
 
       document.title = data.store.name
-
       commit('setStore', data.store)
+      commit('setError', false)
+      commit('setLoading', false)
     } catch (error) {
-      // commit('setError', true)
+      commit('setStore', null)
+      commit('setError', true)
+      commit('setLoading', false)
     }
-
-    commit('setLoading', false)
   },
   loadDistance({ commit }) {
     requestPermission((position) => {

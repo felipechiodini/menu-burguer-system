@@ -45,15 +45,14 @@ export default {
     ...mapGetters('cart', ['cartTotalPrice', 'selectedPayment'])
   },
   methods: {
-    ...mapActions('cart', ['setPayment', 'finishCart']),
+    ...mapActions('cart', ['setPayment', 'finishCart', 'clearCart']),
     fawjfwioafkwioa(payment) {
       this.setPayment(payment.id)
     },
     finish() {
       this.finishCart().then(() => {
-        this.$router.push({
-          name: 'order.finish'
-        })
+        this.clearCart()
+        this.$emit('finished')
       }).catch(() => {
         alert('error')
       })

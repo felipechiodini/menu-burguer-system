@@ -16,8 +16,7 @@ const state = {
   address: {
     street: null,
     number: null,
-  },
-  checkoutStatus: null
+  }
 }
 
 const getters = {
@@ -79,6 +78,10 @@ const getters = {
 }
 
 const actions = {
+  clearCart({ commit }) {
+    commit('clearCart')
+  },
+
   setCustomer({ commit }, payload) {
     commit('setCustomer', payload)
   },
@@ -174,6 +177,24 @@ const mutations = {
   
   setCustomer(state, payload) {
     state.customer = payload
+  },
+
+  clearCart(state) {
+    state.products = [],
+    state.customer = {
+      name: null
+    },
+    state.shipping = null,
+    state.delivery = {
+      type: null
+    },
+    state.payment = {
+      id: null
+    },
+    state.address = {
+      street: null,
+      number: null,
+    }
   }
 
 }
