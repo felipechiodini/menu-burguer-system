@@ -23,7 +23,7 @@
         <warning :text="store.configuration.warning" />
       </div>
       <div class="categories">
-        <div class="category" v-for="(category, key) in store.categories" :key="key">
+        <div class="category" v-for="(category, key) in categories" :key="key">
           <b-button @click="scrollToCategory(category)" variant="transparent p-0">{{ category.name }}</b-button>
         </div>
       </div>
@@ -32,7 +32,7 @@
         v-for="(product, key) in allProducts"
         :key="key"
         :product="product"
-        :id="product.category.name"
+        :id="product.category_name"
       />
     </div>
     <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white m-0" style="position: sticky; bottom: 0; right: 0; z-index: 2;" v-if="hasProducts">
@@ -82,6 +82,19 @@ export default {
     labelDistance() {
       let distance = this.store.distance?.toLocaleString('pt-BR')
       return distance ? distance + ' km' : ''
+    },
+    categories() {
+      const uniqueCategories = new Set()
+
+      this.allProducts.forEach(product => {
+        uniqueCategories.add(product.category_name)
+      })
+
+      return Array.from(uniqueCategories).map(category => {
+        return {
+          name: category
+        }
+      })
     }
   },
   mounted() {
@@ -96,7 +109,14 @@ export default {
       this.$refs['modal'].openModal(product)
     },
     scrollToCategory(category) {
-      document.querySelector(`#${category.name}`).scrollIntoView({ behavior: 'smooth' })
+      const element = document.getElementById(category.name);
+      const headerOffset = 45;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   }
 }
@@ -121,7 +141,6 @@ export default {
     overflow-x: auto;
     position: sticky;
     top: 0;
-    padding: 0 5px;
     background-color: #ffffff;
     z-index: 1;
 
