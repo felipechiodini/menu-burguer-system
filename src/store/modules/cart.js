@@ -31,7 +31,7 @@ const getters = {
       return {
         id: product.id,
         name: rootProduct.name,
-        main_photo: rootProduct.main_photo,
+        photo: rootProduct.photo,
         count: product.count,
         additionals: product.additionals,
         replacements: product.replacements,

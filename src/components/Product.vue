@@ -5,7 +5,7 @@
       <p class="my-2 text-muted">{{ product.description }}</p>
       <h5 style="font-size: 1.4rem;">{{ currency(product.price) }}</h5>   
     </div>
-    <img class="wioahfgowaf" :src="product.main_photo.src">
+    <img class="wioahfgowaf" :src="product.photo.src">
   </div>
 </template>
 

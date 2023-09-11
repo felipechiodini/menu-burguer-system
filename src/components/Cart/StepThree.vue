@@ -1,7 +1,7 @@
 <template>
   <div>
     <cart-header @go-back="$emit('go-back')" icon="arrow_back_ios" name="" />
-    <label v-wave :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payments" :key="key" @click="fawjfwioafkwioa(payment)">
+    <label v-wave :for="`${payment.id}`" class="d-flex align-items-center pointer w-100 p-4 border-bottom" v-for="(payment, key) in store.payment_options" :key="key" @click="fawjfwioafkwioa(payment)">
       <b-form-radio :id="`${payment.id}`" size="lg" name="selected-payment" :value="payment.id" v-model="selectedPayment.id" class="col-auto" />
       <span>{{ payment.name }}</span>
     </label>

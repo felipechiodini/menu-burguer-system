@@ -22,11 +22,10 @@ export default {
     ...mapGetters('store', ['loading', 'error'])
   },
   mounted() {
-    this.loadDistance()
     this.loadStore()
   },
   methods: {
-    ...mapActions('store', ['loadStore', 'loadDistance']),
+    ...mapActions('store', ['loadStore'])
   }
 }
 

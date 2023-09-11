@@ -3,7 +3,7 @@
     <cart-header @go-back="$emit('go-back')" icon="arrow_back_ios" name="Endereço" />
     <div class="d-flex flex-column p-3 box">
       <label for="bairro">Bairro</label>
-      <b-form-select id="bairro" :options="store.addresses" v-model="address.fowajfowa" text-field="name" />
+      <b-form-select id="bairro" :options="store.shipping_options" v-model="address.fowajfowa" text-field="name" />
       <b-input placeholder="Endereço" type="text" v-model="address.street" />
       <b-input v-mask="'#########'" placeholder="Número" v-model="address.number" />
       <b-input placeholder="Complemento" v-model="address.complement" />

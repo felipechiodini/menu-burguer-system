@@ -3,7 +3,7 @@
     <cart-header @go-back="$emit('go-back')" icon="arrow_forward_ios" name="Sacola" :down="true" />
     <div style="height: 95%; overflow: auto;">
       <div  class="row m-0 p-4 border-bottom" v-for="(product, key) in cartProducts" :key="key" >
-        <img class="image rounded" :src="product.main_photo.src">
+        <img class="image rounded" :src="product.photo.src">
         <div class="col px-2 my-2">
           <h5 class="mb-3 title">{{ product.name }}</h5>
           <template v-if="product.additionals">

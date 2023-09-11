@@ -20,7 +20,7 @@
             <div class="col d-flex flex-column">
               <small class="text-muted mb-1" style="font-size: 13px;">Entregar em</small>
               <strong class="mb-1">{{ address.street }}, {{ address.number }}</strong>
-              <small class="text-muted mb-1" style="font-size: 13px;">Vieiras</small>
+              <small class="text-muted mb-1" style="font-size: 13px;">{{ address.street }}</small>
             </div>
             <div class="col-auto">
               <span class="material-icons">arrow_forward_ios</span>
@@ -98,7 +98,7 @@ export default {
     ...mapGetters('store', ['store']),
     ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice', 'cartShippingPrice', 'delivery', 'address']),
     isDelivery() {
-      return this.delivery?.type === 'shipping'
+      return this.delivery?.type === 'delivery'
     },
     hasSelectedOption() {
       return !!this.delivery?.type

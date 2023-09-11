@@ -1,6 +1,9 @@
 <template>
-  <div class="fullscreen-modal" :class="{ 'closed': modalOpen === false, 'opened': modalOpen === true }">
-    <div v-if="loading === false && modalOpen === true">
+  <modal v-model="opened">
+    <b-button @click="closeModal()" variant="primary" class="button-rounded">
+      <span class="material-icons">arrow_back_ios_new</span>
+    </b-button>
+    <div v-if="loading === false && product">
       <carousel :per-page="1" paginationPosition="bottom-overlay" :mouse-drag="false">
         <slide v-for="(photo, key) in product.photos" :key="key">
           <img class="w-100" :src="photo.src">
@@ -10,7 +13,7 @@
         <h4 class="product-title">{{ product.name }}</h4>
         <p class="product-description">{{ product.description }}</p>
         <h4 class="my-3">Adicionais</h4>
-        <div class="row w-100 align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional, key) in product.additionals" :key="additional.id + additional.name + key" @click="inscreaseAdditional(additional)">
+        <div v-wave class="row w-100 align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional, key) in product.additionals" :key="additional.id + additional.name + key" @click="inscreaseAdditional(additional)">
           <div class="col-auto p-0">
             <div class="mb-2">{{ additional.name }}</div>
             <div><span style="font-size: 14px;">+ {{ currency(additional.value) }}</span></div>
@@ -21,28 +24,24 @@
             <b-button size="sm" variant="transparent">+</b-button>
           </div>
         </div>
-
         <h4 class="my-3">Substituições</h4>
         <div
+          v-wave
           class="row w-100 align-items-center p-2 my-2 mx-0 border rounded pointer"
           v-for="(replacement, key) in product.replacements"
           :key="replacement.id + replacement.name + key"
           @click="addOrRemoveReplacement(replacement)"
-          :class="{ 'bg-primary': replacementAmount(replacement) }"
         >
           <div class="col-auto p-0">
             <div class="mb-2">{{ replacement.name }}</div>
             <div>+ {{ currency(replacement.value) }}</div>
           </div>
+          <b-form-radio class="ml-auto" />
         </div>
 
         <h4 class="mt-4 mb-2">Alguma Observação?</h4>
         <textarea v-model="observation" placeholder="Ex: Tirar a cebola, maionese à parte, ponto da carne, etc." rows="2" class="textarea" />
-      
       </div>
-      <b-button @click="closeModal()" class="bg-primary text-white button-rounded">
-        <span class="material-icons">arrow_back_ios_new</span>
-      </b-button>
       <div class="row align-items-center border-top justify-content-around m-0 w-100 py-3 shadow bg-white" style="z-index: 1000; bottom: 0; position: sticky; left: 0;">
         <div class="col-auto">
           <b-button variant="transparent" size="sm" @click="decrement()">-</b-button>
@@ -58,10 +57,11 @@
     <div class="d-flex justify-content-center align-items-center h-100" v-else-if="loading === true">
       <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
     </div>
-  </div>
+  </modal>
 </template>
 
 <script>
+import Modal from './Modal.vue'
 import FloatButton from '@/components/FloatButton.vue'
 import Api from '@/js/Api'
 import { mapActions } from 'vuex'
@@ -70,13 +70,14 @@ export default {
   name: 'ProductPreview',
   components: {
     FloatButton,
+    Modal
   },
   data: () => {
     return {
       product: null,
       counter: 1,
       loading: false,
-      modalOpen: false,
+      opened: false,
       observation: null,
       additionals: [],
       replacements: []
@@ -138,28 +139,23 @@ export default {
         this.replacements = this.replacements.filter(i => i.id !== replacement.id)
       }
     },
-    replacementAmount(replacement) {
-      return this.replacements.find(item => item.id === replacement.id) ? true : false
-    },
     openModal(product) {
-      this.modalOpen = true
+      this.opened = true
       this.loading = true
       Api.get(`/product/${product.id}`).then(({ data }) => {
         this.product = data.product
-        document.body.style.overflow = 'hidden'
       }).finally(() => {
         this.loading = false
       })
     },
     closeModal() {
-      document.body.style.overflow = ''
-      this.modalOpen = false
+      this.opened = false
       this.product = null,
-      this.counter = 1
-      this.loading = false
-      this.modalOpen = false
-      this.observation = null
-      this.additionals = []
+      this.counter = 1,
+      this.loading = false,
+      this.opened = false,
+      this.observation = null,
+      this.additionals = [],
       this.replacements = []
     }
   }
@@ -167,45 +163,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  .fullscreen-modal {
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    overflow: auto;
-  }
-
-  .opened {
-    animation: slide-up 0.3s ease-out forwards;
-  }
-
-  .closed {
-    animation: slide-down 0.3s ease-out forwards;
-  }
-
-  @keyframes slide-down {
-    0% {
-      transform: translateY(0%);
-    }
-
-    100% {
-      transform: translateY(100%);
-    }
-  }
-
-  @keyframes slide-up {
-    0% {
-      transform: translateY(100%);
-    }
-
-    100% {
-      transform: translateY(0%);
-    }
-  }
 
   .textarea {
     padding: 10px;
@@ -243,14 +200,6 @@ export default {
     letter-spacing: 0.7px;
   }
 
-  .display {
-    background-color: #fff;
-    border-top-left-radius: 30px !important;
-    border-top-right-radius: 30px !important;
-    margin-top: -35px;
-    z-index: 2;
-  }
-
   .button-rounded {
     display: flex;
     justify-content: center;
@@ -264,6 +213,8 @@ export default {
     height: 50px;
     width: 50px;
     overflow: hidden;
+    z-index: 2;
+    color: #fff;
   }
 
 </style>

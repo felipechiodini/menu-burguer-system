@@ -1,5 +1,4 @@
 import Api from "@/js/Api"
-import { requestPermission } from "@/js/Location"
 import Router from '@/router'
 
 const state = {
@@ -25,11 +24,7 @@ const actions = {
     try {
       commit('setLoading', true)
 
-      const { data } = await Api.get('/store', {
-        params: {
-          slug: Router.currentRoute.params.store_slug
-        }
-      })
+      const { data } = await Api.get('/store')
 
       document.title = data.store.name
       commit('setStore', data.store)
@@ -41,17 +36,9 @@ const actions = {
       commit('setLoading', false)
     }
   },
-  loadDistance({ commit }) {
-    requestPermission((position) => {
-      Api.get('distance', {
-        params: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }
-      }).then(({ data }) => {
-        commit('setDistance', data.distance)
-      })
-    })
+
+  setDistance({ commit }, payload) {
+    commit('setLoading', payload)
   }
 }
 
@@ -61,6 +48,8 @@ const mutations = {
   },
   setDistance(state, distance) {
     state.store.distance = parseFloat(distance)
+
+    console.log(state.store)
   },
   setLoading(state, loading) {
     state.loading = loading

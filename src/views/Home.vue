@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="store">
     <carousel
       :per-page="1"
       paginationPosition="bottom-overlay"
@@ -12,7 +12,7 @@
         <img class="w-100" :src="banner.src">
       </slide>
     </carousel>
-    <div class="m-2" v-if="store">
+    <div class="m-2">
       <div class="mb-4">
         <h3 class="title mb-3">{{ store.name }}</h3>
         <store-status :status="store.open"></store-status>
@@ -23,7 +23,7 @@
         <warning :text="store.configuration.warning" />
       </div>
       <div class="categories">
-        <div class="category" v-for="(category, key) in categories" :key="key">
+        <div class="category" v-for="(category, key) in store.categories" :key="key">
           <b-button @click="scrollToCategory(category)" variant="transparent p-0">{{ category.name }}</b-button>
         </div>
       </div>
@@ -32,7 +32,7 @@
         v-for="(product, key) in allProducts"
         :key="key"
         :product="product"
-        :id="product.category_name"
+        :category="product.category_name"
       />
     </div>
     <div class="row align-items-center border-top justify-content-center w-100 py-3 shadow-lg bg-white m-0" style="position: sticky; bottom: 0; right: 0; z-index: 2;" v-if="hasProducts">
@@ -51,13 +51,13 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import NavBar from '@/components/NavBar.vue'
 import StoreStatus from '@/components/StoreStatus.vue'
 import Warning from '@/components/Warning.vue'
 import Product from '@/components/Product.vue'
 import ProductPreview from '@/components/ProductPreview.vue'
 import Cart from '@/components/Cart.vue'
-import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
@@ -80,8 +80,7 @@ export default {
     ...mapGetters('cart', ['numberProducts', 'hasProducts', 'cartTotalPrice']),
     ...mapGetters('products', ['allProducts']),
     labelDistance() {
-      let distance = this.store.distance?.toLocaleString('pt-BR')
-      return distance ? distance + ' km' : ''
+      return this.store?.distance
     },
     categories() {
       const uniqueCategories = new Set()
@@ -101,6 +100,7 @@ export default {
     this.getAllProducts()
   },
   methods: {
+    ...mapActions('store', ['setDistance']),
     ...mapActions('products', ['getAllProducts']),
     goCart() {
       this.$refs['cart'].openModal()
@@ -109,7 +109,7 @@ export default {
       this.$refs['modal'].openModal(product)
     },
     scrollToCategory(category) {
-      const element = document.getElementById(category.name);
+      const element = document.querySelector('[category="' + category.name + '"]');
       const headerOffset = 45;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;

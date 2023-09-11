@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/:store_slug',
+    path: '/',
     component: Main,
     children: [
       {
