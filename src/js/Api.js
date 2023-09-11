@@ -3,7 +3,7 @@ import Router from '@/router'
 import store from '@/store'
 
 const Api = Axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL,
+  baseURL: process.env.VUE_APP_API_BASE_URL + '/' + store.getters['store/store'].slug + '/delivery',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
