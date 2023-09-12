@@ -1,6 +1,6 @@
 <template>
   <div>
-    <cart-header @go-back="$emit('go-back')" icon="arrow_forward_ios" name="Sacola" :down="true" />
+    <cart-header @go-back="$emit('go-back')" icon="arrow_forward_ios" name="" :down="true" />
     <div style="height: 95%; overflow: auto;">
       <div  class="row m-0 p-4 border-bottom" v-for="(product, key) in cartProducts" :key="key" >
         <img class="image rounded" :src="product.photo.src">

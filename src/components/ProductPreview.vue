@@ -9,10 +9,10 @@
           <img class="w-100" :src="photo.src">
         </slide>
       </carousel>
-      <div class="p-3 ">
+      <div class="p-2">
         <h4 class="product-title">{{ product.name }}</h4>
         <p class="product-description">{{ product.description }}</p>
-        <h4 class="my-3">Adicionais</h4>
+        <h4 class="my-3">Adicionais <small class="text-muted">Máximo: {{ product.configuration.max_number_additionals }}</small></h4>
         <div v-wave class="row w-100 align-items-center p-2 my-2 mx-0 border rounded pointer" v-for="(additional, key) in product.additionals" :key="additional.id + additional.name + key" @click="inscreaseAdditional(additional)">
           <div class="col-auto p-0">
             <div class="mb-2">{{ additional.name }}</div>
@@ -24,21 +24,28 @@
             <b-button size="sm" variant="transparent">+</b-button>
           </div>
         </div>
-        <h4 class="my-3">Substituições</h4>
-        <div
+        <h4 class="my-3">Substituições <small class="text-muted">Máximo: {{ product.configuration.max_number_replacements }}</small></h4>
+        <label
           v-wave
-          class="row w-100 align-items-center p-2 my-2 mx-0 border rounded pointer"
+          class="d-flex w-100 align-items-center p-2 my-2 border rounded pointer"
           v-for="(replacement, key) in product.replacements"
           :key="replacement.id + replacement.name + key"
-          @click="addOrRemoveReplacement(replacement)"
+          :for="`replacement-${replacement.id}`"
         >
           <div class="col-auto p-0">
             <div class="mb-2">{{ replacement.name }}</div>
             <div>+ {{ currency(replacement.value) }}</div>
           </div>
-          <b-form-radio class="ml-auto" />
-        </div>
-
+          <b-form-checkbox
+            class="ml-auto p-0"
+            v-model="replacements"
+            :key="replacement.id + replacement.name + key"
+            :value="replacement.id"
+            name="replacements-options"
+            @input="onInput"
+            :id="`replacement-${replacement.id}`"
+          />
+        </label>
         <h4 class="mt-4 mb-2">Alguma Observação?</h4>
         <textarea v-model="observation" placeholder="Ex: Tirar a cebola, maionese à parte, ponto da carne, etc." rows="2" class="textarea" />
       </div>
@@ -84,14 +91,14 @@ export default {
     }
   },
   computed: {
-    total() {
+    total() { 
       return (this.product.price + this.additionalsTotal + this.replacementTotal) * this.counter
     },
     additionalsTotal() {
       return this.additionals.reduce((acumulator, additional) => acumulator += additional.price * additional.amount, 0)
     },
     replacementTotal() {
-      return this.replacements.reduce((acumulator, replacement) => acumulator += replacement.price, 0)
+      return this.replacements.reduce((acumulator, id) => acumulator += this.product.replacements.find(replacement => replacement.id === id).value, 0)
     }
   },
   methods: {
@@ -115,6 +122,10 @@ export default {
       this.counter--
     },
     inscreaseAdditional(additional) {
+      if (this.totalAdditionals() > this.product.configuration.max_number_additionals) {
+        return
+      }
+
       const current = this.additionals.find(item => item.id === additional.id)
 
       if (current !== undefined) {
@@ -157,6 +168,15 @@ export default {
       this.observation = null,
       this.additionals = [],
       this.replacements = []
+    },
+    totalAdditionals() {
+      return this.additionals.reduce((acumulator, additional) => acumulator += additional.amount, 1)
+    },
+    async onInput(newValue) {
+      await this.$nextTick()
+      if (newValue.length > this.product.configuration.max_number_replacements) {
+        this.replacements.pop()
+      }
     }
   }
 }
