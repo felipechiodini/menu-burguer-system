@@ -16,11 +16,10 @@
       <div class="mb-4">
         <h3 class="title mb-3">{{ store.name }}</h3>
         <store-status :status="store.open"></store-status>
-        <h5 class="my-1" v-if="store.configuration.allow_withdrawal">{{ 'Retirada: ' + store.configuration.withdrawal_time + ' minutos' }}</h5>
-        <h5 class="my-1">{{ 'Entrega: ' + store.configuration.delivery_time + ' minutos' }}</h5>
+        <h5 class="my-1" v-for="(option, key) in store.delivery_options" :key="key">{{ option.name }}: {{ option.time }}</h5>
         <h5 class="my-1">{{ 'Pedido minimo: ' + currency(store.configuration.minimum_order_value) }}</h5>
         <h5>{{ labelDistance }}</h5>
-        <warning :text="store.configuration.warning" />
+        <warning v-if="store.configuration.warning" :text="store.configuration.warning" />
       </div>
       <div class="categories">
         <div class="category" v-for="(category, key) in store.categories" :key="key">
