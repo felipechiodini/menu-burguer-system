@@ -11,6 +11,11 @@ export default {
     value: {
       type: Boolean
     }
+  },
+  watch: {
+    'value': function(newValue) {
+      document.body.style.overflow = (newValue === true) ? 'hidden' : ''
+    }
   }
 }
 </script>
