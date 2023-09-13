@@ -18,9 +18,14 @@
               <span class="material-icons">gps_fixed</span>
             </div>
             <div class="col d-flex flex-column">
-              <small class="text-muted mb-1" style="font-size: 13px;">Entregar em</small>
-              <strong class="mb-1">{{ address.street }}, {{ address.number }}</strong>
-              <small class="text-muted mb-1" style="font-size: 13px;">{{ address.street }}</small>
+              <template v-if="address.id !== null">
+                <small class="text-muted mb-1" style="font-size: 13px;">Entregar em</small>
+                <strong class="mb-1">{{ address.street }}, {{ address.number }}</strong>
+                <small class="text-muted mb-1" style="font-size: 13px;">{{ address.street }}</small>
+              </template>
+              <template v-else>
+                Selecione um endereço
+              </template>
             </div>
             <div class="col-auto">
               <span class="material-icons">arrow_forward_ios</span>
@@ -32,8 +37,8 @@
             </div>
             <div class="col d-flex flex-column">
               <h3 class="mb-1 text-bolder" style="font-size: 20px;">Retirar na loja</h3>
-              <strong class="mb-1">Rua João Planincheck, 333</strong>
-              <small class="text-muted mb-1" style="font-size: 13px;">Nova Brasília</small>
+              <strong class="mb-1">{{ store.address.street }}, {{ store.address.number }}</strong>
+              <small class="text-muted mb-1" style="font-size: 13px;">{{ store.address.district }} - {{  store.address.city }}, {{  store.address.state }}</small>
             </div>
           </div>
           <div class="py-3">
@@ -56,9 +61,9 @@
         <table class="resume-table">
           <tr>
             <td>Subtotal</td>
-            <td align="right">{{ currency(cartTotalPrice) }}</td>
+            <td align="right">{{ currency(cartTotalProductsPrice) }}</td>
           </tr>
-          <tr>
+          <tr v-if="delivery.type === 'delivery'">
             <td>Entrega</td>
             <td align="right">{{ currency(cartShippingPrice) || 'Aguardando endereço' }}</td>
           </tr>
@@ -96,7 +101,7 @@ export default {
   },
   computed: {
     ...mapGetters('store', ['store']),
-    ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice', 'cartShippingPrice', 'delivery', 'address']),
+    ...mapGetters('cart', ['cartProducts', 'numberProducts', 'hasProducts', 'cartTotalPrice', 'cartTotalProductsPrice', 'cartShippingPrice', 'delivery', 'address']),
     isDelivery() {
       return this.delivery?.type === 'delivery'
     },
@@ -191,7 +196,7 @@ export default {
   .wraper {
     margin-top: 80px;
     margin-bottom: 100px;
-    
+
     & label {
       margin: 15px 0 0 0;
     }

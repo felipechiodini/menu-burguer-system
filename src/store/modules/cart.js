@@ -14,8 +14,10 @@ const state = {
     id: null
   },
   address: {
+    id: null,
     street: null,
     number: null,
+    complement: null
   }
 }
 
@@ -24,10 +26,11 @@ const getters = {
     return state.products.map(product => {
       const rootProduct = rootState.products.all.find(item => item.id === product.id)
 
-      const price = (rootProduct.price +
+      const price = (rootProduct.price.current +
         + product.additionals.reduce((acumulator, additional) => acumulator += additional.price * additional.amount, 0)
-        + product.replacements.reduce((acumulator, replacement) => acumulator += replacement.price, 0)) * product.count
-      
+        + product.replacements.reduce((acumulator, replacement) => acumulator += replacement.price, 0))
+        * product.count
+
       return {
         id: product.id,
         name: rootProduct.name,
@@ -41,8 +44,12 @@ const getters = {
     })
   },
 
-  cartTotalPrice: (state, getters) => {
+  cartTotalProductsPrice: (state, getters) => {
     return getters.cartProducts.reduce((total, product) => total += product.price, 0)
+  },
+
+  cartTotalPrice: (state, getters) => {
+    return getters.cartProducts.reduce((total, product) => total += product.price, 0) + state.shippingPrice
   },
 
   cartShippingPrice: (state) => {
@@ -74,7 +81,6 @@ const getters = {
   selectedPayment: (state) => {
     return state.payment
   }
-  
 }
 
 const actions = {
@@ -88,10 +94,18 @@ const actions = {
 
   setDelivery({ commit }, payload) {
     commit('setDelivery', payload)
+
+    if (payload === 'withdraw') {
+      commit('setShippingPrice', 0)
+      commit('setAddress', { id: null, street: null, number: null, complement: null })
+    } else {
+      commit('setShippingPrice', null)
+    }
   },
 
-  setAddress({ commit }, payload) {
+  setAddress({ state, commit, dispatch, rootState }, payload) {
     commit('setAddress', payload)
+    commit('setShippingPrice', rootState.store.store.shipping_options.find(option => option.id === payload.id).value)
   },
 
   setPayment({ commit }, payload) {
@@ -111,7 +125,7 @@ const actions = {
   incrementProduct({ state, commit }, id) {
     commit('incrementItemCart', id)
   },
-      
+
   decrementProduct({ state, commit }, id) {
     const product = state.products.find(product => product.id === id)
 
@@ -166,15 +180,16 @@ const mutations = {
     state.payment = {
       id: payload
     }
-
-    console.log('here')
-    console.log(state.payment)
   },
 
   setAddress(state, payload) {
     state.address = payload
   },
-  
+
+  setShippingPrice(state, payload) {
+    state.shippingPrice = payload
+  },
+
   setCustomer(state, payload) {
     state.customer = payload
   },

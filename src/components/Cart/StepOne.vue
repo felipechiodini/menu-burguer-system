@@ -4,7 +4,7 @@
     <div style="height: 95%; overflow: auto;">
       <div  class="row m-0 p-4 border-bottom" v-for="(product, key) in cartProducts" :key="key" >
         <img class="image rounded" :src="product.photo.src">
-        <div class="col px-2 my-2">
+        <div class="col px-2">
           <h5 class="mb-3 title">{{ product.name }}</h5>
           <template v-if="product.additionals">
             <div v-for="additional in product.additionals" :key="additional.name">
@@ -16,14 +16,14 @@
               <span>{{ replacement.name }}</span>
             </div>
           </template>
-          <span class="title">{{ currency(product.price) }}</span>
+          <span class="title">{{ currency(product.price.current) }}</span>
         </div>
         <div class="col-auto p-0 align-self-end d-flex align-items-center justify-content-center p-1 border rounded">
           <b-button variant="transparent" class="d-flex p-0" @click="decrementProduct(product.id)">
             <span v-if="product.count > 1" class="material-icons text-primary">remove</span>
             <span v-else class="material-icons text-primary">delete</span>
           </b-button>
-          <strong class="mx-4">{{ product.count }}</strong>   
+          <strong class="mx-4">{{ product.count }}</strong>
           <b-button variant="transparent" class="d-flex p-0" @click="incrementProduct(product.id)">
             <span class="material-icons text-primary">add</span>
           </b-button>
@@ -34,10 +34,6 @@
           <tr>
             <td class="p-1">Total</td>
             <td class="p-1" align="right">{{ currency(cartTotalPrice) }}</td>
-          </tr>
-          <tr>
-            <td class="p-1">Entrega</td>
-            <td class="p-1" align="right">Aguardando endereço</td>
           </tr>
         </table>
         <b-button variant="primary" @click="$emit('next-step')">

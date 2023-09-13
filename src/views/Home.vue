@@ -22,7 +22,7 @@
         <warning v-if="store.configuration.warning" :text="store.configuration.warning" />
       </div>
       <div class="categories">
-        <div class="category" v-for="(category, key) in store.categories" :key="key">
+        <div class="category" v-for="(category, key) in categories" :key="key">
           <b-button @click="scrollToCategory(category)" variant="transparent p-0">{{ category.name }}</b-button>
         </div>
       </div>
@@ -41,10 +41,7 @@
         <span class="col text-white">{{ currency(cartTotalPrice) }}</span>
       </b-button>
     </div>
-    <product-preview
-      :product="selectProduct"
-      ref="modal"
-    />
+    <product-preview :product="selectProduct" ref="preview" />
     <cart ref="cart" />
   </div>
 </template>
@@ -105,7 +102,7 @@ export default {
       this.$refs['cart'].openModal()
     },
     showProduct(product) {
-      this.$refs['modal'].openModal(product)
+      this.$refs['preview'].openModal(product)
     },
     scrollToCategory(category) {
       const element = document.querySelector('[category="' + category.name + '"]');

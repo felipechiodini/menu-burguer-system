@@ -21,7 +21,7 @@
           <div class="ml-auto">
             <b-button size="sm" variant="transparent" v-if="additionalAmount(additional)" @click.stop="decreaseAdditional(additional)">-</b-button>
             <strong class="mx-3" v-if="additionalAmount(additional)">{{ additionalAmount(additional) }}</strong>
-            <b-button size="sm" variant="transparent">+</b-button>
+            <b-button :disabled="reachTotalAdditionals()" size="sm" variant="transparent">+</b-button>
           </div>
         </div>
         <h4 class="my-3">Substituições <small class="text-muted">Máximo: {{ product.configuration.max_number_replacements }}</small></h4>
@@ -52,7 +52,7 @@
       <div class="row align-items-center border-top justify-content-around m-0 w-100 py-3 shadow bg-white" style="z-index: 1000; bottom: 0; position: sticky; left: 0;">
         <div class="col-auto">
           <b-button variant="transparent" size="sm" @click="decrement()">-</b-button>
-          <strong class="mx-3">{{ counter }}</strong>   
+          <strong class="mx-3">{{ counter }}</strong>
           <b-button variant="transparent" size="sm" @click="increment()">+</b-button>
         </div>
         <b-button class="border-none bg-primary btn-add" @click="addToCart()">
@@ -91,8 +91,8 @@ export default {
     }
   },
   computed: {
-    total() { 
-      return (this.product.price + this.additionalsTotal + this.replacementTotal) * this.counter
+    total() {
+      return (this.product.price.current + this.additionalsTotal + this.replacementTotal) * this.counter
     },
     additionalsTotal() {
       return this.additionals.reduce((acumulator, additional) => acumulator += additional.price * additional.amount, 0)
@@ -109,7 +109,15 @@ export default {
         count: this.counter,
         observation: this.observation,
         additionals: this.additionals,
-        replacements: this.replacements
+        replacements: this.replacements.map(replacement => {
+          const r = this.product.replacements.find(r => r.id === replacement)
+
+          return {
+            id: replacement,
+            price: r.value,
+            name: r.name
+          }
+        })
       })
 
       this.closeModal()
@@ -122,7 +130,7 @@ export default {
       this.counter--
     },
     inscreaseAdditional(additional) {
-      if (this.totalAdditionals() > this.product.configuration.max_number_additionals) {
+      if (this.reachTotalAdditionals()) {
         return
       }
 
@@ -131,7 +139,7 @@ export default {
       if (current !== undefined) {
         current.amount++
       } else {
-        this.additionals.push({ id: additional.id, price: additional.value, amount: 1 })
+        this.additionals.push({ id: additional.id, price: additional.value, amount: 1, name: additional.name })
       }
     },
     decreaseAdditional(additional) {
@@ -171,6 +179,9 @@ export default {
     },
     totalAdditionals() {
       return this.additionals.reduce((acumulator, additional) => acumulator += additional.amount, 1)
+    },
+    reachTotalAdditionals() {
+      return this.totalAdditionals() > this.product.configuration.max_number_additionals
     },
     async onInput(newValue) {
       await this.$nextTick()
